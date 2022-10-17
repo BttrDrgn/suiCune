@@ -75,7 +75,7 @@ void IntroSuicuneJumpTilemap(void);
 void IntroSuicuneJumpAttrmap(void);
 void IntroSuicuneBackTilemap(void);
 void IntroSuicuneBackAttrmap(void);
-void IntroSuicunePalette(void);
+//void IntroSuicunePalette(void);
 void IntroUnownBackGFX(void);
 void IntroGrass1GFX(void);
 void IntroGrass2GFX(void);

@@ -1,5 +1,10 @@
 #include "../../constants.h"
 #include "intro.h"
+#include "../../tools/emu/incbin.h"
+
+INCBIN(int, IntroSuicunePalette, "gfx/intro/suicune_pal.pal");
+
+const unsigned int IntroSuicunePalette;
 
 void CrystalIntro(void) {
     LDH_A_addr(rSVBK);
@@ -98,6 +103,39 @@ void IntroScenes(void) {
 
     return;
 }
+
+/*
+Handler IntroScenes[28] = {
+    IntroScene1,
+    IntroScene2,
+    IntroScene3,
+    IntroScene4,
+    IntroScene5,
+    IntroScene6,
+    IntroScene7,
+    IntroScene8,
+    IntroScene9,
+    IntroScene10,
+    IntroScene11,
+    IntroScene12,
+    IntroScene13,
+    IntroScene14,
+    IntroScene15,
+    IntroScene16,
+    IntroScene17,
+    IntroScene18,
+    IntroScene19,
+    IntroScene20,
+    IntroScene21,
+    IntroScene22,
+    IntroScene23,
+    IntroScene24,
+    IntroScene25,
+    IntroScene26,
+    IntroScene27,
+    IntroScene28,
+};
+*/
 
 void NextIntroScene(void){
     //LD_HL(wJumptableIndex);
@@ -815,14 +853,23 @@ void IntroScene15(void){
     PUSH_AF;
     LD_A(BANK(wBGPals1));
     LDH_addr_A(rSVBK);
-    LD_HL(mIntroSuicunePalette);
+
+    CopyBytes(IntroSuicunePalette, 0x80, wBGPals1);
+    CopyBytes(IntroSuicunePalette, 0x80, wBGPals2);
+    //memcpy(wBGPals1, IntroSuicunePalette, 128);
+    //memcpy(wBGPals2, IntroSuicunePalette, 128);
+    /*
+    LD_HL(IntroSuicunePalette);
+    //LD_HL(mIntroSuicunePalette);
     LD_DE(wBGPals1);
     LD_BC(16 * PALETTE_SIZE);
     CALL(aCopyBytes);
-    LD_HL(mIntroSuicunePalette);
+    LD_HL(IntroSuicunePalette);
+    //LD_HL(mIntroSuicunePalette);
     LD_DE(wBGPals2);
     LD_BC(16 * PALETTE_SIZE);
     CALL(aCopyBytes);
+    */
     POP_AF;
     LDH_addr_A(rSVBK);
     XOR_A_A;
@@ -933,7 +980,8 @@ void IntroScene18(void){
     //RET;
 
 done:
-    return IntroScene19();
+    return;
+    //return IntroScene19();
 
 }
 
@@ -969,14 +1017,23 @@ void IntroScene19(void){
     PUSH_AF;
     LD_A(BANK(wBGPals1));
     LDH_addr_A(rSVBK);
-    LD_HL(mIntroSuicunePalette);
+
+    //CopyBytes(IntroSuicunePalette, 0x80, wBGPals1);
+    //CopyBytes(IntroSuicunePalette, 0x80, wBGPals2);
+    memcpy(wBGPals1, IntroSuicunePalette, 128);
+    memcpy(wBGPals2, IntroSuicunePalette, 128);
+    /*
+    LD_HL(IntroSuicunePalette);
+    //LD_HL(mIntroSuicunePalette);
     LD_DE(wBGPals1);
     LD_BC(16 * PALETTE_SIZE);
     CALL(aCopyBytes);
-    LD_HL(mIntroSuicunePalette);
+    LD_HL(IntroSuicunePalette);
+    //LD_HL(mIntroSuicunePalette);
     LD_DE(wBGPals2);
     LD_BC(16 * PALETTE_SIZE);
     CALL(aCopyBytes);
+    */
     POP_AF;
     LDH_addr_A(rSVBK);
     XOR_A_A;
@@ -1739,7 +1796,7 @@ void Intro_DecompressRequest2bpp_255Tiles(void){
 
     POP_AF;
     LDH_addr_A(rSVBK);
-    //RET;
+    RET;
 
 }
 
@@ -1988,14 +2045,14 @@ void IntroSuicuneBackTilemap(void){
 void IntroSuicuneBackAttrmap(void){
 // INCBIN "gfx/intro/suicune_back.attrmap.lz"
 
-    return IntroSuicunePalette();
+    return;
+    //return IntroSuicunePalette;
 }
 
-void IntroSuicunePalette(void){
-// INCLUDE "gfx/intro/suicune.pal"
-
-    return IntroUnownBackGFX();
-}
+//void IntroSuicunePalette(void) {
+    //INCBIN(suicune_pal, "gfx/intro/suicune.pal");
+    //return IntroUnownBackGFX();
+//}
 
 void IntroUnownBackGFX(void){
 // INCBIN "gfx/intro/unown_back.2bpp.lz"

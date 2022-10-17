@@ -188,7 +188,7 @@ void init_function_pointers() {
     CONVERTED(Bankswitch);
     // REDIRECTED(FarCall);
     // REDIRECTED(Start);
-    REDIRECTED(JumpTable);
+    // REDIRECTED(JumpTable);
 
     // home/hm_moves.c
     // REDIRECTED(IsHM);
@@ -414,7 +414,7 @@ void init_function_pointers() {
     // REDIRECTED(GetNthMove);
     // REDIRECTED(GetCurNickname);
     // REDIRECTED(LoadCry);
-    CONVERTED(IsAPokemon);
+    // REDIRECTED(IsAPokemon);
     // REDIRECTED(PlayStereoCry2);
     // REDIRECTED(PrintLevel_Force3Digits);
     // REDIRECTED(GetNickname);
@@ -1198,7 +1198,7 @@ void init_function_pointers() {
     REDIRECTED(IntroSuicuneJumpGFX);
     REDIRECTED(IntroGrass3GFX);
     REDIRECTED(Intro_Scene20_AppearUnown);
-    REDIRECTED(IntroSuicunePalette);
+    //REDIRECTED(IntroSuicunePalette);
     REDIRECTED(IntroGrass1GFX);
     REDIRECTED(IntroBackgroundAttrmap);
     REDIRECTED(IntroScene23);
