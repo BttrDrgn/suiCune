@@ -7,7 +7,7 @@
 //#include "engine/link/place_waiting_text.h"
 //#include "engine/gfx/load_push_oam.h"
 #include "engine/overworld/map_objects.h"
-//#include "engine/menus/intro_menu.h"
+#include "engine/menus/intro_menu.h"
 //#include "engine/overworld/init_map.h"
 //#include "engine/pokemon/learn.h"
 //#include "engine/pokemon/correct_nick_errors.h"
@@ -149,7 +149,7 @@
 
 // SECTION "Battle Core", ROMX
 
-//#include "engine/battle/core.h"
+#include "engine/battle/core.h"
 //#include "data/battle/effect_command_pointers.h"
 
 // SECTION "bank10", ROMX

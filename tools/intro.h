@@ -1,8 +1,7 @@
 void CrystalIntro(void);
 void IntroSceneJumper(void);
-void (*IntroScenes[29])();
+void IntroScenes(void);
 void NextIntroScene(void);
-void NullScene();
 void IntroScene1(void);
 void IntroScene2(void);
 void IntroScene3(void);

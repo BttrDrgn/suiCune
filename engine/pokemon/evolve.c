@@ -1,7 +1,7 @@
 #include "../../constants.h"
 #include "evolve.h"
 
-void EvolvePokemon(void){
+void EvolvePokemon(void) {
     LD_HL(wEvolvableFlags);
     XOR_A_A;
     LD_hl_A;
@@ -12,7 +12,7 @@ void EvolvePokemon(void){
     return EvolveAfterBattle();
 }
 
-void EvolveAfterBattle(void){
+void EvolveAfterBattle(void) {
     XOR_A_A;
     LD_addr_A(wMonTriedToEvolve);
     DEC_A;
@@ -27,7 +27,7 @@ void EvolveAfterBattle(void){
     return EvolveAfterBattle_MasterLoop();
 }
 
-void EvolveAfterBattle_MasterLoop(void){
+void EvolveAfterBattle_MasterLoop(void) {
     LD_HL(wCurPartyMon);
     INC_hl;
 
@@ -36,7 +36,7 @@ void EvolveAfterBattle_MasterLoop(void){
     INC_HL;
     LD_A_hl;
     CP_A(0xff);
-    JP_Z (mEvolveAfterBattle_MasterLoop_ReturnToMap);
+    JP_Z(mEvolveAfterBattle_MasterLoop_ReturnToMap);
 
     LD_addr_A(wEvolutionOldSpecies);
 
@@ -48,7 +48,7 @@ void EvolveAfterBattle_MasterLoop(void){
     CALL(aEvoFlagAction);
     LD_A_C;
     AND_A_A;
-    JP_Z (mEvolveAfterBattle_MasterLoop);
+    JP_Z(mEvolveAfterBattle_MasterLoop);
 
     LD_A_addr(wEvolutionOldSpecies);
     DEC_A;
@@ -71,7 +71,7 @@ void EvolveAfterBattle_MasterLoop(void){
 loop:
     LD_A_hli;
     AND_A_A;
-    JR_Z (mEvolveAfterBattle_MasterLoop);
+    JR_Z(mEvolveAfterBattle_MasterLoop);
 
     LD_B_A;
 
@@ -80,30 +80,30 @@ loop:
 
     LD_A_addr(wLinkMode);
     AND_A_A;
-    JP_NZ (mEvolveAfterBattle_MasterLoop_dont_evolve_2);
+    JP_NZ(mEvolveAfterBattle_MasterLoop_dont_evolve_2);
 
     LD_A_B;
     CP_A(EVOLVE_ITEM);
-    JP_Z (mEvolveAfterBattle_MasterLoop_item);
+    JP_Z(mEvolveAfterBattle_MasterLoop_item);
 
     LD_A_addr(wForceEvolution);
     AND_A_A;
-    JP_NZ (mEvolveAfterBattle_MasterLoop_dont_evolve_2);
+    JP_NZ(mEvolveAfterBattle_MasterLoop_dont_evolve_2);
 
     LD_A_B;
     CP_A(EVOLVE_LEVEL);
-    JP_Z (mEvolveAfterBattle_MasterLoop_level);
+    JP_Z(mEvolveAfterBattle_MasterLoop_level);
 
     CP_A(EVOLVE_HAPPINESS);
     IF_Z goto happiness;
 
-//  EVOLVE_STAT
+    //  EVOLVE_STAT
     LD_A_addr(wTempMonLevel);
     CP_A_hl;
-    JP_C (mEvolveAfterBattle_MasterLoop_dont_evolve_1);
+    JP_C(mEvolveAfterBattle_MasterLoop_dont_evolve_1);
 
     CALL(aIsMonHoldingEverstone);
-    JP_Z (mEvolveAfterBattle_MasterLoop_dont_evolve_1);
+    JP_Z(mEvolveAfterBattle_MasterLoop_dont_evolve_1);
 
     PUSH_HL;
     LD_DE(wTempMonAttack);
@@ -121,7 +121,7 @@ got_tyrogue_evo:
 
     INC_HL;
     CP_A_hl;
-    JP_NZ (mEvolveAfterBattle_MasterLoop_dont_evolve_2);
+    JP_NZ(mEvolveAfterBattle_MasterLoop_dont_evolve_2);
 
     INC_HL;
     goto proceed;
@@ -130,10 +130,10 @@ got_tyrogue_evo:
 happiness:
     LD_A_addr(wTempMonHappiness);
     CP_A(HAPPINESS_TO_EVOLVE);
-    JP_C (mEvolveAfterBattle_MasterLoop_dont_evolve_2);
+    JP_C(mEvolveAfterBattle_MasterLoop_dont_evolve_2);
 
     CALL(aIsMonHoldingEverstone);
-    JP_Z (mEvolveAfterBattle_MasterLoop_dont_evolve_2);
+    JP_Z(mEvolveAfterBattle_MasterLoop_dont_evolve_2);
 
     LD_A_hli;
     CP_A(TR_ANYTIME);
@@ -141,27 +141,27 @@ happiness:
     CP_A(TR_MORNDAY);
     IF_Z goto happiness_daylight;
 
-//  TR_NITE
+    //  TR_NITE
     LD_A_addr(wTimeOfDay);
     CP_A(NITE_F);
-    JP_NZ (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_NZ(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
     goto proceed;
 
 
 happiness_daylight:
     LD_A_addr(wTimeOfDay);
     CP_A(NITE_F);
-    JP_Z (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_Z(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
     goto proceed;
 
 
 trade:
     LD_A_addr(wLinkMode);
     AND_A_A;
-    JP_Z (mEvolveAfterBattle_MasterLoop_dont_evolve_2);
+    JP_Z(mEvolveAfterBattle_MasterLoop_dont_evolve_2);
 
     CALL(aIsMonHoldingEverstone);
-    JP_Z (mEvolveAfterBattle_MasterLoop_dont_evolve_2);
+    JP_Z(mEvolveAfterBattle_MasterLoop_dont_evolve_2);
 
     LD_A_hli;
     LD_B_A;
@@ -170,11 +170,11 @@ trade:
 
     LD_A_addr(wLinkMode);
     CP_A(LINK_TIMECAPSULE);
-    JP_Z (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_Z(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
 
     LD_A_addr(wTempMonItem);
     CP_A_B;
-    JP_NZ (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_NZ(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
 
     XOR_A_A;
     LD_addr_A(wTempMonItem);
@@ -186,14 +186,14 @@ item:
     LD_B_A;
     LD_A_addr(wCurItem);
     CP_A_B;
-    JP_NZ (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_NZ(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
 
     LD_A_addr(wForceEvolution);
     AND_A_A;
-    JP_Z (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_Z(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
     LD_A_addr(wLinkMode);
     AND_A_A;
-    JP_NZ (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_NZ(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
     goto proceed;
 
 
@@ -202,9 +202,9 @@ level:
     LD_B_A;
     LD_A_addr(wTempMonLevel);
     CP_A_B;
-    JP_C (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_C(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
     CALL(aIsMonHoldingEverstone);
-    JP_Z (mEvolveAfterBattle_MasterLoop_dont_evolve_3);
+    JP_Z(mEvolveAfterBattle_MasterLoop_dont_evolve_3);
 
 
 proceed:
@@ -242,7 +242,7 @@ proceed:
     PUSH_AF;
     ClearSprites();
     POP_AF;
-    JP_C (mCancelEvolution);
+    JP_C(mCancelEvolution);
 
     LD_HL(mCongratulationsYourPokemonText);
     CALL(aPrintText);
@@ -261,8 +261,9 @@ proceed:
     CALL(aPrintTextboxText);
     FARCALL(aStubbedTrainerRankings_MonsEvolved);
 
-    LD_DE(MUSIC_NONE);
-    CALL(aPlayMusic);
+    //LD_DE(MUSIC_NONE);
+    //CALL(aPlayMusic);
+    v_PlayMusic(MUSIC_NONE);
     LD_DE(SFX_CAUGHT_MON);
     CALL(aPlaySFX);
     CALL(aWaitSFX);
@@ -350,7 +351,7 @@ dont_evolve_3:
 
 
 UnusedReturnToMap:
-//   //  unreferenced
+    //   //  unreferenced
     POP_HL;
 
 ReturnToMap:
@@ -359,18 +360,18 @@ ReturnToMap:
     POP_HL;
     LD_A_addr(wLinkMode);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     LD_A_addr(wBattleMode);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     LD_A_addr(wMonTriedToEvolve);
     AND_A_A;
-    CALL_NZ (aRestartMapMusic);
+    CALL_NZ(aRestartMapMusic);
     RET;
 
 }
 
-void UpdateSpeciesNameIfNotNicknamed(void){
+void UpdateSpeciesNameIfNotNicknamed(void) {
     LD_A_addr(wCurSpecies);
     PUSH_AF;
     LD_A_addr(wBaseDexNo);
@@ -386,7 +387,7 @@ loop:
     INC_DE;
     CP_A_hl;
     INC_HL;
-    RET_NZ ;
+    RET_NZ;
     CP_A(0x50);
     IF_NZ goto loop;
 
@@ -405,7 +406,7 @@ loop:
 
 }
 
-void CancelEvolution(void){
+void CancelEvolution(void) {
     LD_HL(mStoppedEvolvingText);
     CALL(aPrintText);
     ClearTilemap();
@@ -414,7 +415,7 @@ void CancelEvolution(void){
 
 }
 
-void IsMonHoldingEverstone(void){
+void IsMonHoldingEverstone(void) {
     PUSH_HL;
     LD_A_addr(wCurPartyMon);
     LD_HL(wPartyMon1Item);
@@ -427,35 +428,35 @@ void IsMonHoldingEverstone(void){
 
 }
 
-void CongratulationsYourPokemonText(void){
+void CongratulationsYourPokemonText(void) {
     //text_far ['_CongratulationsYourPokemonText']
     //text_end ['?']
 
     return EvolvedIntoText();
 }
 
-void EvolvedIntoText(void){
+void EvolvedIntoText(void) {
     //text_far ['_EvolvedIntoText']
     //text_end ['?']
 
     return StoppedEvolvingText();
 }
 
-void StoppedEvolvingText(void){
+void StoppedEvolvingText(void) {
     //text_far ['_StoppedEvolvingText']
     //text_end ['?']
 
     return EvolvingText();
 }
 
-void EvolvingText(void){
+void EvolvingText(void) {
     //text_far ['_EvolvingText']
     //text_end ['?']
 
     return LearnLevelMoves();
 }
 
-void LearnLevelMoves(void){
+void LearnLevelMoves(void) {
     LD_A_addr(wTempSpecies);
     LD_addr_A(wCurPartySpecies);
     DEC_A;
@@ -527,8 +528,8 @@ done:
 
 }
 
-void FillMoves(void){
-//  Fill in moves at de for wCurPartySpecies at wCurPartyLevel
+void FillMoves(void) {
+    //  Fill in moves at de for wCurPartySpecies at wCurPartyLevel
 
     PUSH_HL;
     PUSH_DE;
@@ -561,11 +562,11 @@ GetMove:
 GetLevel:
     LD_A_hli;
     AND_A_A;
-    JP_Z (mFillMoves_done);
+    JP_Z(mFillMoves_done);
     LD_B_A;
     LD_A_addr(wCurPartyLevel);
     CP_A_B;
-    JP_C (mFillMoves_done);
+    JP_C(mFillMoves_done);
     LD_A_addr(wSkipMovesBeforeLevelUp);
     AND_A_A;
     IF_Z goto CheckMove;
@@ -649,7 +650,7 @@ done:
 
 }
 
-void ShiftMoves(void){
+void ShiftMoves(void) {
     LD_C(NUM_MOVES - 1);
 
 loop:
@@ -662,7 +663,7 @@ loop:
 
 }
 
-void EvoFlagAction(void){
+void EvoFlagAction(void) {
     PUSH_DE;
     LD_D(0x0);
     PREDEF(pSmallFarFlagAction);
@@ -671,16 +672,16 @@ void EvoFlagAction(void){
 
 }
 
-void GetPreEvolution(void){
-//  Find the first mon to evolve into wCurPartySpecies.
+void GetPreEvolution(void) {
+    //  Find the first mon to evolve into wCurPartySpecies.
 
-//  Return carry and the new species in wCurPartySpecies
-//  if a pre-evolution is found.
+    //  Return carry and the new species in wCurPartySpecies
+    //  if a pre-evolution is found.
 
     LD_C(0);
 
 loop:
-//   //  For each Pokemon...
+    //   //  For each Pokemon...
     LD_HL(mEvosAttacksPointers);
     LD_B(0);
     ADD_HL_BC;
@@ -690,7 +691,7 @@ loop:
     LD_L_A;
 
 loop2:
-//   //  For each evolution...
+    //   //  For each evolution...
     LD_A_hli;
     AND_A_A;
     IF_Z goto no_evolve;  // If we jump, this Pokemon does not evolve into wCurPartySpecies.

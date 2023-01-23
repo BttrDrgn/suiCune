@@ -3,7 +3,7 @@
 
 //  Core components of the battle engine.
 
-void DoBattle(void){
+void DoBattle(void) {
     XOR_A_A;
     LD_addr_A(wBattleParticipantsNotFainted);
     LD_addr_A(wBattleParticipantsIncludingFainted);
@@ -58,13 +58,13 @@ player_2:
     CALL(aCheckPlayerPartyForFitMon);
     LD_A_D;
     AND_A_A;
-    JP_Z (mLostBattle);
+    JP_Z(mLostBattle);
     CALL(aSafeLoadTempTilemapToTilemap);
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_DEBUG);
-    JP_Z (mDoBattle_tutorial_debug);
+    JP_Z(mDoBattle_tutorial_debug);
     CP_A(BATTLETYPE_TUTORIAL);
-    JP_Z (mDoBattle_tutorial_debug);
+    JP_Z(mDoBattle_tutorial_debug);
     XOR_A_A;
     LD_addr_A(wCurPartyMon);
 
@@ -129,7 +129,7 @@ tutorial_debug:
 
 }
 
-void WildFled_EnemyFled_LinkBattleCanceled(void){
+void WildFled_EnemyFled_LinkBattleCanceled(void) {
     CALL(aSafeLoadTempTilemapToTilemap);
     LD_A_addr(wBattleResult);
     AND_A(BATTLERESULT_BITMASK);
@@ -175,12 +175,12 @@ skip_sfx:
 
 }
 
-void BattleTurn(void){
+void BattleTurn(void) {
 
 loop:
     CALL(aStubbed_Increments5_a89a);
     CALL(aCheckContestBattleOver);
-    JP_C (mBattleTurn_quit);
+    JP_C(mBattleTurn_quit);
 
     XOR_A_A;
     LD_addr_A(wPlayerIsSwitching);
@@ -200,7 +200,7 @@ loop:
     FARCALL(aFunction100da5);
     FARCALL(aStartMobileInactivityTimer);
     FARCALL(aFunction100dd8);
-    JP_C (mBattleTurn_quit);
+    JP_C(mBattleTurn_quit);
 
 not_disconnected:
 
@@ -229,7 +229,7 @@ skip_iteration:
     CALL(aBattle_EnemyFirst);
     goto proceed;
 
-false:
+    false:
     CALL(aBattle_PlayerFirst);
 
 proceed:
@@ -256,7 +256,7 @@ quit:
 
 }
 
-void Stubbed_Increments5_a89a(void){
+void Stubbed_Increments5_a89a(void) {
     RET;
     LD_A(BANK(s5_a89a));  // MBC30 bank used by JP Crystal// inaccessible by MBC3
     CALL(aOpenSRAM);
@@ -277,42 +277,42 @@ finish:
 
 }
 
-void HandleBetweenTurnEffects(void){
+void HandleBetweenTurnEffects(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto CheckEnemyFirst;
     CALL(aCheckFaint_PlayerThenEnemy);
-    RET_C ;
+    RET_C;
     CALL(aHandleFutureSight);
     CALL(aCheckFaint_PlayerThenEnemy);
-    RET_C ;
+    RET_C;
     CALL(aHandleWeather);
     CALL(aCheckFaint_PlayerThenEnemy);
-    RET_C ;
+    RET_C;
     CALL(aHandleWrap);
     CALL(aCheckFaint_PlayerThenEnemy);
-    RET_C ;
+    RET_C;
     CALL(aHandlePerishSong);
     CALL(aCheckFaint_PlayerThenEnemy);
-    RET_C ;
+    RET_C;
     goto NoMoreFaintingConditions;
 
 
 CheckEnemyFirst:
     CALL(aCheckFaint_EnemyThenPlayer);
-    RET_C ;
+    RET_C;
     CALL(aHandleFutureSight);
     CALL(aCheckFaint_EnemyThenPlayer);
-    RET_C ;
+    RET_C;
     CALL(aHandleWeather);
     CALL(aCheckFaint_EnemyThenPlayer);
-    RET_C ;
+    RET_C;
     CALL(aHandleWrap);
     CALL(aCheckFaint_EnemyThenPlayer);
-    RET_C ;
+    RET_C;
     CALL(aHandlePerishSong);
     CALL(aCheckFaint_EnemyThenPlayer);
-    RET_C ;
+    RET_C;
 
 
 NoMoreFaintingConditions:
@@ -329,7 +329,7 @@ NoMoreFaintingConditions:
 
 }
 
-void CheckFaint_PlayerThenEnemy(void){
+void CheckFaint_PlayerThenEnemy(void) {
     CALL(aHasPlayerFainted);
     IF_NZ goto PlayerNotFainted;
     CALL(aHandlePlayerMonFaint);
@@ -358,7 +358,7 @@ BattleIsOver:
 
 }
 
-void CheckFaint_EnemyThenPlayer(void){
+void CheckFaint_EnemyThenPlayer(void) {
     CALL(aHasEnemyFainted);
     IF_NZ goto EnemyNotFainted;
     CALL(aHandleEnemyMonFaint);
@@ -387,7 +387,7 @@ BattleIsOver:
 
 }
 
-void HandleBerserkGene(void){
+void HandleBerserkGene(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto reverse;
@@ -398,7 +398,7 @@ void HandleBerserkGene(void){
 
 reverse:
     CALL(aHandleBerserkGene_enemy);
-// fallthrough
+    // fallthrough
 
 
 player:
@@ -414,7 +414,7 @@ enemy:
     LD_DE(wOTPartyMon1Item);
     LD_A_addr(wCurOTMon);
     LD_B_A;
-// fallthrough
+    // fallthrough
 
 
 go:
@@ -426,7 +426,7 @@ go:
     SUB_A(BERSERK_GENE);
     POP_BC;
     POP_DE;
-    RET_NZ ;
+    RET_NZ;
 
     LD_hl_A;
 
@@ -458,7 +458,7 @@ go:
     CALLFAR(aBattleCommand_StatUpMessage);
     POP_AF;
     BIT_A(SUBSTATUS_CONFUSED);
-    RET_NZ ;
+    RET_NZ;
     XOR_A_A;
     LD_addr_A(wNumHits);
     LD_DE(ANIM_CONFUSED);
@@ -469,7 +469,7 @@ go:
 
 }
 
-void EnemyTriesToFlee(void){
+void EnemyTriesToFlee(void) {
     LD_A_addr(wLinkMode);
     AND_A_A;
     IF_Z goto not_linked;
@@ -490,7 +490,7 @@ forfeit:
 
 }
 
-void DetermineMoveOrder(void){
+void DetermineMoveOrder(void) {
     LD_A_addr(wLinkMode);
     AND_A_A;
     IF_Z goto use_move;
@@ -510,14 +510,14 @@ void DetermineMoveOrder(void){
 
     CALL(aBattleRandom);
     CP_A(50 percent + 1);
-    JP_C (mDetermineMoveOrder_player_first);
+    JP_C(mDetermineMoveOrder_player_first);
     JP(mDetermineMoveOrder_enemy_first);
 
 
 player_2:
     CALL(aBattleRandom);
     CP_A(50 percent + 1);
-    JP_C (mDetermineMoveOrder_enemy_first);
+    JP_C(mDetermineMoveOrder_enemy_first);
     JP(mDetermineMoveOrder_player_first);
 
 
@@ -531,10 +531,10 @@ switchout:
 use_move:
     LD_A_addr(wBattlePlayerAction);
     AND_A_A;  // BATTLEPLAYERACTION_USEMOVE?
-    JP_NZ (mDetermineMoveOrder_player_first);
+    JP_NZ(mDetermineMoveOrder_player_first);
     CALL(aCompareMovePriority);
     IF_Z goto equal_priority;
-    JP_C (mDetermineMoveOrder_player_first);  // player goes first
+    JP_C(mDetermineMoveOrder_player_first);  // player goes first
     JP(mDetermineMoveOrder_enemy_first);
 
 
@@ -572,20 +572,20 @@ both_have_quick_claw:
     IF_Z goto player_2b;
     CALL(aBattleRandom);
     CP_A_C;
-    JP_C (mDetermineMoveOrder_enemy_first);
+    JP_C(mDetermineMoveOrder_enemy_first);
     CALL(aBattleRandom);
     CP_A_E;
-    JP_C (mDetermineMoveOrder_player_first);
+    JP_C(mDetermineMoveOrder_player_first);
     goto speed_check;
 
 
 player_2b:
     CALL(aBattleRandom);
     CP_A_E;
-    JP_C (mDetermineMoveOrder_player_first);
+    JP_C(mDetermineMoveOrder_player_first);
     CALL(aBattleRandom);
     CP_A_C;
-    JP_C (mDetermineMoveOrder_enemy_first);
+    JP_C(mDetermineMoveOrder_enemy_first);
     goto speed_check;
 
 
@@ -595,7 +595,7 @@ speed_check:
     LD_C(2);
     CALL(aCompareBytes);
     IF_Z goto speed_tie;
-    JP_NC (mDetermineMoveOrder_player_first);
+    JP_NC(mDetermineMoveOrder_player_first);
     JP(mDetermineMoveOrder_enemy_first);
 
 
@@ -605,14 +605,14 @@ speed_tie:
     IF_Z goto player_2c;
     CALL(aBattleRandom);
     CP_A(50 percent + 1);
-    JP_C (mDetermineMoveOrder_player_first);
+    JP_C(mDetermineMoveOrder_player_first);
     JP(mDetermineMoveOrder_enemy_first);
 
 
 player_2c:
     CALL(aBattleRandom);
     CP_A(50 percent + 1);
-    JP_C (mDetermineMoveOrder_enemy_first);
+    JP_C(mDetermineMoveOrder_enemy_first);
 
 player_first:
     SCF;
@@ -625,7 +625,7 @@ enemy_first:
 
 }
 
-void CheckContestBattleOver(void){
+void CheckContestBattleOver(void) {
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_CONTEST);
     IF_NZ goto contest_not_over;
@@ -646,10 +646,10 @@ contest_not_over:
 
 }
 
-void CheckPlayerLockedIn(void){
+void CheckPlayerLockedIn(void) {
     LD_A_addr(wPlayerSubStatus4);
     AND_A(1 << SUBSTATUS_RECHARGE);
-    JP_NZ (mCheckPlayerLockedIn_quit);
+    JP_NZ(mCheckPlayerLockedIn_quit);
 
     LD_HL(wEnemySubStatus3);
     RES_hl(SUBSTATUS_FLINCHED);
@@ -658,11 +658,11 @@ void CheckPlayerLockedIn(void){
 
     LD_A_hl;
     AND_A(1 << SUBSTATUS_CHARGED | 1 << SUBSTATUS_RAMPAGE);
-    JP_NZ (mCheckPlayerLockedIn_quit);
+    JP_NZ(mCheckPlayerLockedIn_quit);
 
     LD_HL(wPlayerSubStatus1);
     BIT_hl(SUBSTATUS_ROLLOUT);
-    JP_NZ (mCheckPlayerLockedIn_quit);
+    JP_NZ(mCheckPlayerLockedIn_quit);
 
     AND_A_A;
     RET;
@@ -674,9 +674,9 @@ quit:
 
 }
 
-void ParsePlayerAction(void){
+void ParsePlayerAction(void) {
     CALL(aCheckPlayerLockedIn);
-    JP_C (mParsePlayerAction_locked_in);
+    JP_C(mParsePlayerAction_locked_in);
     LD_HL(wPlayerSubStatus5);
     BIT_hl(SUBSTATUS_ENCORED);
     IF_Z goto not_encored;
@@ -712,7 +712,7 @@ struggle:
     LD_A(0x1);
     LDH_addr_A(hBGMapMode);
     POP_AF;
-    RET_NZ ;
+    RET_NZ;
 
 
 encored:
@@ -780,7 +780,7 @@ reset_rage:
 
 }
 
-void HandleEncore(void){
+void HandleEncore(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto player_1;
@@ -794,7 +794,7 @@ player_1:
 do_player:
     LD_HL(wPlayerSubStatus5);
     BIT_hl(SUBSTATUS_ENCORED);
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wPlayerEncoreCount);
     DEC_A;
     LD_addr_A(wPlayerEncoreCount);
@@ -806,7 +806,7 @@ do_player:
     ADD_HL_BC;
     LD_A_hl;
     AND_A(PP_MASK);
-    RET_NZ ;
+    RET_NZ;
 
 
 end_player_encore:
@@ -820,7 +820,7 @@ end_player_encore:
 do_enemy:
     LD_HL(wEnemySubStatus5);
     BIT_hl(SUBSTATUS_ENCORED);
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wEnemyEncoreCount);
     DEC_A;
     LD_addr_A(wEnemyEncoreCount);
@@ -832,7 +832,7 @@ do_enemy:
     ADD_HL_BC;
     LD_A_hl;
     AND_A(PP_MASK);
-    RET_NZ ;
+    RET_NZ;
 
 
 end_enemy_encore:
@@ -844,7 +844,7 @@ end_enemy_encore:
 
 }
 
-void TryEnemyFlee(void){
+void TryEnemyFlee(void) {
     LD_A_addr(wBattleMode);
     DEC_A;
     IF_NZ goto Stay;
@@ -900,14 +900,14 @@ Flee:
     SCF;
     RET;
 
-// INCLUDE "data/wild/flee_mons.asm"
+    // INCLUDE "data/wild/flee_mons.asm"
 
     return CompareMovePriority();
 }
 
-void CompareMovePriority(void){
-//  Compare the priority of the player and enemy's moves.
-//  Return carry if the player goes first, or z if they match.
+void CompareMovePriority(void) {
+    //  Compare the priority of the player and enemy's moves.
+    //  Return carry if the player goes first, or z if they match.
 
     LD_A_addr(wCurPlayerMove);
     CALL(aGetMovePriority);
@@ -921,15 +921,15 @@ void CompareMovePriority(void){
 
 }
 
-void GetMovePriority(void){
-//  Return the priority (0-3) of move a.
+void GetMovePriority(void) {
+    //  Return the priority (0-3) of move a.
 
     LD_B_A;
 
-// Vital Throw goes last.
+    // Vital Throw goes last.
     CP_A(VITAL_THROW);
     LD_A(0);
-    RET_Z ;
+    RET_Z;
 
     CALL(aGetMoveEffect);
     LD_HL(mMoveEffectPriorities);
@@ -950,12 +950,12 @@ done:
     LD_A_hl;
     RET;
 
-// INCLUDE "data/moves/effects_priorities.asm"
+    // INCLUDE "data/moves/effects_priorities.asm"
 
     return GetMoveEffect();
 }
 
-void GetMoveEffect(void){
+void GetMoveEffect(void) {
     LD_A_B;
     DEC_A;
     LD_HL(mMoves + MOVE_EFFECT);
@@ -968,10 +968,10 @@ void GetMoveEffect(void){
 
 }
 
-void Battle_EnemyFirst(void){
+void Battle_EnemyFirst(void) {
     CALL(aLoadTilemapToTempTilemap);
     CALL(aTryEnemyFlee);
-    JP_C (mWildFled_EnemyFled_LinkBattleCanceled);
+    JP_C(mWildFled_EnemyFled_LinkBattleCanceled);
     CALL(aSetEnemyTurn);
     LD_A(0x1);
     LD_addr_A(wEnemyGoesFirst);
@@ -979,34 +979,34 @@ void Battle_EnemyFirst(void){
     IF_C goto switch_item;
     CALL(aEnemyTurn_EndOpponentProtectEndureDestinyBond);
     CALL(aCheckMobileBattleError);
-    RET_C ;
+    RET_C;
     LD_A_addr(wForcedSwitch);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     CALL(aHasPlayerFainted);
-    JP_Z (mHandlePlayerMonFaint);
+    JP_Z(mHandlePlayerMonFaint);
     CALL(aHasEnemyFainted);
-    JP_Z (mHandleEnemyMonFaint);
+    JP_Z(mHandleEnemyMonFaint);
 
 
 switch_item:
     CALL(aSetEnemyTurn);
     CALL(aResidualDamage);
-    JP_Z (mHandleEnemyMonFaint);
+    JP_Z(mHandleEnemyMonFaint);
     CALL(aRefreshBattleHuds);
     CALL(aPlayerTurn_EndOpponentProtectEndureDestinyBond);
     CALL(aCheckMobileBattleError);
-    RET_C ;
+    RET_C;
     LD_A_addr(wForcedSwitch);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     CALL(aHasEnemyFainted);
-    JP_Z (mHandleEnemyMonFaint);
+    JP_Z(mHandleEnemyMonFaint);
     CALL(aHasPlayerFainted);
-    JP_Z (mHandlePlayerMonFaint);
+    JP_Z(mHandlePlayerMonFaint);
     CALL(aSetPlayerTurn);
     CALL(aResidualDamage);
-    JP_Z (mHandlePlayerMonFaint);
+    JP_Z(mHandlePlayerMonFaint);
     CALL(aRefreshBattleHuds);
     XOR_A_A;  // BATTLEPLAYERACTION_USEMOVE
     LD_addr_A(wBattlePlayerAction);
@@ -1014,7 +1014,7 @@ switch_item:
 
 }
 
-void Battle_PlayerFirst(void){
+void Battle_PlayerFirst(void) {
     XOR_A_A;
     LD_addr_A(wEnemyGoesFirst);
     CALL(aSetEnemyTurn);
@@ -1024,41 +1024,41 @@ void Battle_PlayerFirst(void){
     POP_BC;
     LD_A_addr(wForcedSwitch);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     CALL(aCheckMobileBattleError);
-    RET_C ;
+    RET_C;
     CALL(aHasEnemyFainted);
-    JP_Z (mHandleEnemyMonFaint);
+    JP_Z(mHandleEnemyMonFaint);
     CALL(aHasPlayerFainted);
-    JP_Z (mHandlePlayerMonFaint);
+    JP_Z(mHandlePlayerMonFaint);
     PUSH_BC;
     CALL(aSetPlayerTurn);
     CALL(aResidualDamage);
     POP_BC;
-    JP_Z (mHandlePlayerMonFaint);
+    JP_Z(mHandlePlayerMonFaint);
     PUSH_BC;
     CALL(aRefreshBattleHuds);
     POP_AF;
     IF_C goto switched_or_used_item;
     CALL(aLoadTilemapToTempTilemap);
     CALL(aTryEnemyFlee);
-    JP_C (mWildFled_EnemyFled_LinkBattleCanceled);
+    JP_C(mWildFled_EnemyFled_LinkBattleCanceled);
     CALL(aEnemyTurn_EndOpponentProtectEndureDestinyBond);
     CALL(aCheckMobileBattleError);
-    RET_C ;
+    RET_C;
     LD_A_addr(wForcedSwitch);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     CALL(aHasPlayerFainted);
-    JP_Z (mHandlePlayerMonFaint);
+    JP_Z(mHandlePlayerMonFaint);
     CALL(aHasEnemyFainted);
-    JP_Z (mHandleEnemyMonFaint);
+    JP_Z(mHandleEnemyMonFaint);
 
 
 switched_or_used_item:
     CALL(aSetEnemyTurn);
     CALL(aResidualDamage);
-    JP_Z (mHandleEnemyMonFaint);
+    JP_Z(mHandleEnemyMonFaint);
     CALL(aRefreshBattleHuds);
     XOR_A_A;  // BATTLEPLAYERACTION_USEMOVE
     LD_addr_A(wBattlePlayerAction);
@@ -1066,7 +1066,7 @@ switched_or_used_item:
 
 }
 
-void PlayerTurn_EndOpponentProtectEndureDestinyBond(void){
+void PlayerTurn_EndOpponentProtectEndureDestinyBond(void) {
     CALL(aSetPlayerTurn);
     CALL(aEndUserDestinyBond);
     CALLFAR(aDoPlayerTurn);
@@ -1074,7 +1074,7 @@ void PlayerTurn_EndOpponentProtectEndureDestinyBond(void){
 
 }
 
-void EnemyTurn_EndOpponentProtectEndureDestinyBond(void){
+void EnemyTurn_EndOpponentProtectEndureDestinyBond(void) {
     CALL(aSetEnemyTurn);
     CALL(aEndUserDestinyBond);
     CALLFAR(aDoEnemyTurn);
@@ -1082,7 +1082,7 @@ void EnemyTurn_EndOpponentProtectEndureDestinyBond(void){
 
 }
 
-void EndOpponentProtectEndureDestinyBond(void){
+void EndOpponentProtectEndureDestinyBond(void) {
     LD_A(BATTLE_VARS_SUBSTATUS1_OPP);
     CALL(aGetBattleVarAddr);
     RES_hl(SUBSTATUS_PROTECT);
@@ -1094,7 +1094,7 @@ void EndOpponentProtectEndureDestinyBond(void){
 
 }
 
-void EndUserDestinyBond(void){
+void EndUserDestinyBond(void) {
     LD_A(BATTLE_VARS_SUBSTATUS5);
     CALL(aGetBattleVarAddr);
     RES_hl(SUBSTATUS_DESTINY_BOND);
@@ -1102,39 +1102,39 @@ void EndUserDestinyBond(void){
 
 }
 
-void HasUserFainted(void){
+void HasUserFainted(void) {
     LDH_A_addr(hBattleTurn);
     AND_A_A;
-    JR_Z (mHasPlayerFainted);
+    JR_Z(mHasPlayerFainted);
     return HasEnemyFainted();
 }
 
-void HasEnemyFainted(void){
+void HasEnemyFainted(void) {
     LD_HL(wEnemyMonHP);
     JR(mCheckIfHPIsZero);
 
 }
 
-void HasPlayerFainted(void){
+void HasPlayerFainted(void) {
     LD_HL(wBattleMonHP);
 
     return CheckIfHPIsZero();
 }
 
-void CheckIfHPIsZero(void){
+void CheckIfHPIsZero(void) {
     LD_A_hli;
     OR_A_hl;
     RET;
 
 }
 
-void ResidualDamage(void){
-//  Return z if the user fainted before
-//  or as a result of residual damage.
-//  For Sandstorm damage, see HandleWeather.
+void ResidualDamage(void) {
+    //  Return z if the user fainted before
+    //  or as a result of residual damage.
+    //  For Sandstorm damage, see HandleWeather.
 
     CALL(aHasUserFainted);
-    RET_Z ;
+    RET_Z;
 
     LD_A(BATTLE_VARS_STATUS);
     CALL(aGetBattleVar);
@@ -1190,7 +1190,7 @@ did_toxic:
 did_psn_brn:
 
     CALL(aHasUserFainted);
-    JP_Z (mResidualDamage_fainted);
+    JP_Z(mResidualDamage_fainted);
 
     LD_A(BATTLE_VARS_SUBSTATUS4);
     CALL(aGetBattleVarAddr);
@@ -1204,7 +1204,7 @@ did_psn_brn:
     LD_A(BATTLE_VARS_SUBSTATUS3_OPP);
     CALL(aGetBattleVar);
     AND_A(1 << SUBSTATUS_FLYING | 1 << SUBSTATUS_UNDERGROUND);
-    CALL_Z (aCall_PlayBattleAnim_OnlyIfVisible);
+    CALL_Z(aCall_PlayBattleAnim_OnlyIfVisible);
     CALL(aSwitchTurnCore);
 
     CALL(aGetEighthMaxHP);
@@ -1264,7 +1264,7 @@ not_cursed:
 check_fainted:
     LD_A_hli;
     OR_A_hl;
-    RET_NZ ;
+    RET_NZ;
 
 
 fainted:
@@ -1276,7 +1276,7 @@ fainted:
 
 }
 
-void HandlePerishSong(void){
+void HandlePerishSong(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto EnemyFirst;
@@ -1304,7 +1304,7 @@ got_count:
     LD_A(BATTLE_VARS_SUBSTATUS1);
     CALL(aGetBattleVar);
     BIT_A(SUBSTATUS_PERISH);
-    RET_Z ;
+    RET_Z;
     DEC_hl;
     LD_A_hl;
     LD_addr_A(wTextDecimalByte);
@@ -1312,7 +1312,7 @@ got_count:
     LD_HL(mPerishCountText);
     CALL(aStdBattleTextbox);
     POP_AF;
-    RET_NZ ;
+    RET_NZ;
     LD_A(BATTLE_VARS_SUBSTATUS1);
     CALL(aGetBattleVarAddr);
     RES_hl(SUBSTATUS_PERISH);
@@ -1339,7 +1339,7 @@ kill_enemy:
     LD_hl_A;
     LD_A_addr(wBattleMode);
     DEC_A;
-    RET_Z ;
+    RET_Z;
     LD_HL(wOTPartyMon1HP);
     LD_A_addr(wCurOTMon);
     CALL(aGetPartyLocation);
@@ -1350,7 +1350,7 @@ kill_enemy:
 
 }
 
-void HandleWrap(void){
+void HandleWrap(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto EnemyFirst;
@@ -1379,12 +1379,12 @@ do_it:
 got_addrs:
     LD_A_hl;
     AND_A_A;
-    RET_Z ;
+    RET_Z;
 
     LD_A(BATTLE_VARS_SUBSTATUS4);
     CALL(aGetBattleVar);
     BIT_A(SUBSTATUS_SUBSTITUTE);
-    RET_NZ ;
+    RET_NZ;
 
     LD_A_de;
     LD_addr_A(wNamedObjectIndex);
@@ -1422,7 +1422,7 @@ print_text:
 
 }
 
-void SwitchTurnCore(void){
+void SwitchTurnCore(void) {
     LDH_A_addr(hBattleTurn);
     XOR_A(1);
     LDH_addr_A(hBattleTurn);
@@ -1430,7 +1430,7 @@ void SwitchTurnCore(void){
 
 }
 
-void HandleLeftovers(void){
+void HandleLeftovers(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto DoEnemyFirst;
@@ -1453,7 +1453,7 @@ do_it:
     CALL(aGetItemName);
     LD_A_B;
     CP_A(HELD_LEFTOVERS);
-    RET_NZ ;
+    RET_NZ;
 
     LD_HL(wBattleMonHP);
     LDH_A_addr(hBattleTurn);
@@ -1463,7 +1463,7 @@ do_it:
 
 
 got_hp:
-//  Don't restore if we're already at max HP
+    //  Don't restore if we're already at max HP
     LD_A_hli;
     LD_B_A;
     LD_A_hli;
@@ -1473,7 +1473,7 @@ got_hp:
     IF_NZ goto restore;
     LD_A_hl;
     CP_A_C;
-    RET_Z ;
+    RET_Z;
 
 
 restore:
@@ -1485,7 +1485,7 @@ restore:
 
 }
 
-void HandleMysteryberry(void){
+void HandleMysteryberry(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto DoEnemyFirst;
@@ -1555,7 +1555,7 @@ quit:
 
 
 restore:
-// lousy hack
+    // lousy hack
     LD_A_hl;
     CP_A(SKETCH);
     LD_B(1);
@@ -1637,7 +1637,7 @@ skip_consumption:
 
 }
 
-void HandleFutureSight(void){
+void HandleFutureSight(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto enemy_first;
@@ -1664,11 +1664,11 @@ do_it:
 okay:
     LD_A_hl;
     AND_A_A;
-    RET_Z ;
+    RET_Z;
     DEC_A;
     LD_hl_A;
     CP_A(0x1);
-    RET_NZ ;
+    RET_NZ;
 
     LD_HL(mBattleText_TargetWasHitByFutureSight);
     CALL(aStdBattleTextbox);
@@ -1700,7 +1700,7 @@ okay:
 
 }
 
-void HandleDefrost(void){
+void HandleDefrost(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto enemy_first;
@@ -1714,15 +1714,15 @@ enemy_first:
 do_player_turn:
     LD_A_addr(wBattleMonStatus);
     BIT_A(FRZ);
-    RET_Z ;
+    RET_Z;
 
     LD_A_addr(wPlayerJustGotFrozen);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
 
     CALL(aBattleRandom);
     CP_A(10 percent);
-    RET_NC ;
+    RET_NC;
     XOR_A_A;
     LD_addr_A(wBattleMonStatus);
     LD_A_addr(wCurBattleMon);
@@ -1738,13 +1738,13 @@ do_player_turn:
 do_enemy_turn:
     LD_A_addr(wEnemyMonStatus);
     BIT_A(FRZ);
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wEnemyJustGotFrozen);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     CALL(aBattleRandom);
     CP_A(10 percent);
-    RET_NC ;
+    RET_NC;
     XOR_A_A;
     LD_addr_A(wEnemyMonStatus);
 
@@ -1765,7 +1765,7 @@ wild:
 
 }
 
-void HandleSafeguard(void){
+void HandleSafeguard(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto player1;
@@ -1779,10 +1779,10 @@ player1:
 CheckPlayer:
     LD_A_addr(wPlayerScreens);
     BIT_A(SCREENS_SAFEGUARD);
-    RET_Z ;
+    RET_Z;
     LD_HL(wPlayerSafeguardCount);
     DEC_hl;
-    RET_NZ ;
+    RET_NZ;
     RES_A(SCREENS_SAFEGUARD);
     LD_addr_A(wPlayerScreens);
     XOR_A_A;
@@ -1792,10 +1792,10 @@ CheckPlayer:
 CheckEnemy:
     LD_A_addr(wEnemyScreens);
     BIT_A(SCREENS_SAFEGUARD);
-    RET_Z ;
+    RET_Z;
     LD_HL(wEnemySafeguardCount);
     DEC_hl;
-    RET_NZ ;
+    RET_NZ;
     RES_A(SCREENS_SAFEGUARD);
     LD_addr_A(wEnemyScreens);
     LD_A(0x1);
@@ -1808,7 +1808,7 @@ print:
 
 }
 
-void HandleScreens(void){
+void HandleScreens(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto Both;
@@ -1839,9 +1839,9 @@ CheckEnemy:
 
 TickScreens:
     BIT_hl(SCREENS_LIGHT_SCREEN);
-    CALL_NZ (aHandleScreens_LightScreenTick);
+    CALL_NZ(aHandleScreens_LightScreenTick);
     BIT_hl(SCREENS_REFLECT);
-    CALL_NZ (aHandleScreens_ReflectTick);
+    CALL_NZ(aHandleScreens_ReflectTick);
     RET;
 
 
@@ -1861,7 +1861,7 @@ LightScreenTick:
     LD_A_de;
     DEC_A;
     LD_de_A;
-    RET_NZ ;
+    RET_NZ;
     RES_hl(SCREENS_LIGHT_SCREEN);
     PUSH_HL;
     PUSH_DE;
@@ -1877,17 +1877,17 @@ ReflectTick:
     LD_A_de;
     DEC_A;
     LD_de_A;
-    RET_NZ ;
+    RET_NZ;
     RES_hl(SCREENS_REFLECT);
     LD_HL(mBattleText_MonsReflectFaded);
     JP(mStdBattleTextbox);
 
 }
 
-void HandleWeather(void){
+void HandleWeather(void) {
     LD_A_addr(wBattleWeather);
     CP_A(WEATHER_NONE);
-    RET_Z ;
+    RET_Z;
 
     LD_HL(wWeatherCount);
     DEC_hl;
@@ -1898,13 +1898,13 @@ void HandleWeather(void){
 
     LD_A_addr(wBattleWeather);
     CP_A(WEATHER_SANDSTORM);
-    RET_NZ ;
+    RET_NZ;
 
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto enemy_first;
 
-//  player first
+    //  player first
     CALL(aSetPlayerTurn);
     CALL(aHandleWeather_SandstormDamage);
     CALL(aSetEnemyTurn);
@@ -1921,7 +1921,7 @@ SandstormDamage:
     LD_A(BATTLE_VARS_SUBSTATUS3);
     CALL(aGetBattleVar);
     BIT_A(SUBSTATUS_UNDERGROUND);
-    RET_NZ ;
+    RET_NZ;
 
     LD_HL(wBattleMonType1);
     LDH_A_addr(hBattleTurn);
@@ -1932,19 +1932,19 @@ SandstormDamage:
 ok:
     LD_A_hli;
     CP_A(ROCK);
-    RET_Z ;
+    RET_Z;
     CP_A(GROUND);
-    RET_Z ;
+    RET_Z;
     CP_A(STEEL);
-    RET_Z ;
+    RET_Z;
 
     LD_A_hl;
     CP_A(ROCK);
-    RET_Z ;
+    RET_Z;
     CP_A(GROUND);
-    RET_Z ;
+    RET_Z;
     CP_A(STEEL);
-    RET_Z ;
+    RET_Z;
 
     CALL(aSwitchTurnCore);
     XOR_A_A;
@@ -1981,35 +1981,35 @@ PrintWeatherMessage:
 
 
 WeatherMessages:
-//  entries correspond to WEATHER_* constants
-    //dw ['BattleText_RainContinuesToFall'];
-    //dw ['BattleText_TheSunlightIsStrong'];
-    //dw ['BattleText_TheSandstormRages'];
+    //  entries correspond to WEATHER_* constants
+        //dw ['BattleText_RainContinuesToFall'];
+        //dw ['BattleText_TheSunlightIsStrong'];
+        //dw ['BattleText_TheSandstormRages'];
 
 
 WeatherEndedMessages:
-//  entries correspond to WEATHER_* constants
-    //dw ['BattleText_TheRainStopped'];
-    //dw ['BattleText_TheSunlightFaded'];
-    //dw ['BattleText_TheSandstormSubsided'];
+    //  entries correspond to WEATHER_* constants
+        //dw ['BattleText_TheRainStopped'];
+        //dw ['BattleText_TheSunlightFaded'];
+        //dw ['BattleText_TheSandstormSubsided'];
 
     return SubtractHPFromTarget();
 }
 
-void SubtractHPFromTarget(void){
+void SubtractHPFromTarget(void) {
     CALL(aSubtractHP);
     JP(mUpdateHPBar);
 
 }
 
-void SubtractHPFromUser(void){
-//  Subtract HP from mon
+void SubtractHPFromUser(void) {
+    //  Subtract HP from mon
     CALL(aSubtractHP);
     JP(mUpdateHPBarBattleHuds);
 
 }
 
-void SubtractHP(void){
+void SubtractHP(void) {
     LD_HL(wBattleMonHP);
     LDH_A_addr(hBattleTurn);
     AND_A_A;
@@ -2028,7 +2028,7 @@ ok:
     SBC_A_B;
     LD_hl_A;
     LD_addr_A(wHPBuffer3 + 1);
-    RET_NC ;
+    RET_NC;
 
     LD_A_addr(wHPBuffer2);
     LD_C_A;
@@ -2043,12 +2043,12 @@ ok:
 
 }
 
-void GetSixteenthMaxHP(void){
+void GetSixteenthMaxHP(void) {
     CALL(aGetQuarterMaxHP);
-//  quarter result
+    //  quarter result
     SRL_C;
     SRL_C;
-//  at least 1
+    //  at least 1
     LD_A_C;
     AND_A_A;
     IF_NZ goto ok;
@@ -2059,13 +2059,13 @@ ok:
 
 }
 
-void GetEighthMaxHP(void){
-//  output: bc
+void GetEighthMaxHP(void) {
+    //  output: bc
     CALL(aGetQuarterMaxHP);
-//  assumes nothing can have 1024 or more hp
-//  halve result
+    //  assumes nothing can have 1024 or more hp
+    //  halve result
     SRL_C;
-//  at least 1
+    //  at least 1
     LD_A_C;
     AND_A_A;
     IF_NZ goto end;
@@ -2076,18 +2076,18 @@ end:
 
 }
 
-void GetQuarterMaxHP(void){
-//  output: bc
+void GetQuarterMaxHP(void) {
+    //  output: bc
     CALL(aGetMaxHP);
 
-//  quarter result
+    //  quarter result
     SRL_B;
     RR_C;
     SRL_B;
     RR_C;
 
-//  assumes nothing can have 1024 or more hp
-//  at least 1
+    //  assumes nothing can have 1024 or more hp
+    //  at least 1
     LD_A_C;
     AND_A_A;
     IF_NZ goto end;
@@ -2098,15 +2098,15 @@ end:
 
 }
 
-void GetHalfMaxHP(void){
-//  output: bc
+void GetHalfMaxHP(void) {
+    //  output: bc
     CALL(aGetMaxHP);
 
-//  halve result
+    //  halve result
     SRL_B;
     RR_C;
 
-//  at least 1
+    //  at least 1
     LD_A_C;
     OR_A_B;
     IF_NZ goto end;
@@ -2117,8 +2117,8 @@ end:
 
 }
 
-void GetMaxHP(void){
-//  output: bc, wHPBuffer1
+void GetMaxHP(void) {
+    //  output: bc, wHPBuffer1
 
     LD_HL(wBattleMonMaxHP);
     LDH_A_addr(hBattleTurn);
@@ -2138,7 +2138,30 @@ ok:
 
 }
 
-void CheckUserHasEnoughHP(void){
+void GetHalfHP(void) {
+    //  //  unreferenced
+    LD_HL(wBattleMonHP);
+    LDH_A_addr(hBattleTurn);
+    AND_A_A;
+    IF_Z goto ok;
+    LD_HL(wEnemyMonHP);
+
+ok:
+    LD_A_hli;
+    LD_B_A;
+    LD_A_hli;
+    LD_C_A;
+    SRL_B;
+    RR_C;
+    LD_A_hli;
+    LD_addr_A(wHPBuffer1 + 1);
+    LD_A_hl;
+    LD_addr_A(wHPBuffer1);
+    RET;
+
+}
+
+void CheckUserHasEnoughHP(void) {
     LD_HL(wBattleMonHP + 1);
     LDH_A_addr(hBattleTurn);
     AND_A_A;
@@ -2155,7 +2178,7 @@ ok:
 
 }
 
-void RestoreHP(void){
+void RestoreHP(void) {
     LD_HL(wEnemyMonMaxHP);
     LDH_A_addr(hBattleTurn);
     AND_A_A;
@@ -2203,13 +2226,13 @@ overflow:
 
 }
 
-void UpdateHPBarBattleHuds(void){
+void UpdateHPBarBattleHuds(void) {
     CALL(aUpdateHPBar);
     JP(mUpdateBattleHuds);
 
 }
 
-void UpdateHPBar(void){
+void UpdateHPBar(void) {
     hlcoord(10, 9, wTilemap);
     LDH_A_addr(hBattleTurn);
     AND_A_A;
@@ -2227,24 +2250,24 @@ ok:
 
 }
 
-void HandleEnemyMonFaint(void){
+void HandleEnemyMonFaint(void) {
     CALL(aFaintEnemyPokemon);
     LD_HL(wBattleMonHP);
     LD_A_hli;
     OR_A_hl;
-    CALL_Z (aFaintYourPokemon);
+    CALL_Z(aFaintYourPokemon);
     XOR_A_A;
     LD_addr_A(wWhichMonFaintedFirst);
     CALL(aUpdateBattleStateAndExperienceAfterEnemyFaint);
     CALL(aCheckPlayerPartyForFitMon);
     LD_A_D;
     AND_A_A;
-    JP_Z (mLostBattle);
+    JP_Z(mLostBattle);
 
     LD_HL(wBattleMonHP);
     LD_A_hli;
     OR_A_hl;
-    CALL_NZ (aUpdatePlayerHUD);
+    CALL_NZ(aUpdatePlayerHUD);
 
     LD_A(0x1);
     LDH_addr_A(hBGMapMode);
@@ -2262,7 +2285,7 @@ void HandleEnemyMonFaint(void){
 
 trainer:
     CALL(aCheckEnemyTrainerDefeated);
-    JP_Z (mWinTrainerBattle);
+    JP_Z(mWinTrainerBattle);
 
     LD_HL(wBattleMonHP);
     LD_A_hli;
@@ -2280,12 +2303,12 @@ trainer:
 dont_flee:
     CALL(aForcePlayerMonChoice);
     CALL(aCheckMobileBattleError);
-    JP_C (mWildFled_EnemyFled_LinkBattleCanceled);
+    JP_C(mWildFled_EnemyFled_LinkBattleCanceled);
 
     LD_A(BATTLEPLAYERACTION_USEITEM);
     LD_addr_A(wBattlePlayerAction);
     CALL(aHandleEnemySwitch);
-    JP_Z (mWildFled_EnemyFled_LinkBattleCanceled);
+    JP_Z(mWildFled_EnemyFled_LinkBattleCanceled);
     JR(mDoubleSwitch);
 
 
@@ -2293,14 +2316,14 @@ player_mon_not_fainted:
     LD_A(BATTLEPLAYERACTION_USEITEM);
     LD_addr_A(wBattlePlayerAction);
     CALL(aHandleEnemySwitch);
-    JP_Z (mWildFled_EnemyFled_LinkBattleCanceled);
+    JP_Z(mWildFled_EnemyFled_LinkBattleCanceled);
     XOR_A_A;  // BATTLEPLAYERACTION_USEMOVE
     LD_addr_A(wBattlePlayerAction);
     RET;
 
 }
 
-void DoubleSwitch(void){
+void DoubleSwitch(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto player_1;
@@ -2333,7 +2356,7 @@ done:
 
 }
 
-void UpdateBattleStateAndExperienceAfterEnemyFaint(void){
+void UpdateBattleStateAndExperienceAfterEnemyFaint(void) {
     CALL(aUpdateBattleMonInParty);
     LD_A_addr(wBattleMode);
     DEC_A;
@@ -2382,10 +2405,10 @@ player_mon_did_not_faint:
     CALL(aCheckPlayerPartyForFitMon);
     LD_A_D;
     AND_A_A;
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wBattleMode);
     DEC_A;
-    CALL_Z (aPlayVictoryMusic);
+    CALL_Z(aPlayVictoryMusic);
     CALL(aEmptyBattleTextbox);
     CALL(aLoadTilemapToTempTilemap);
     LD_A_addr(wBattleResult);
@@ -2412,7 +2435,7 @@ skip_exp:
     LD_addr_A(wGivingExperienceToExpShareHolders);
     CALL(aGiveExperiencePoints);
     CALL(aIsAnyMonHoldingExpShare);
-    RET_Z ;
+    RET_Z;
 
     LD_A_addr(wBattleParticipantsNotFainted);
     PUSH_AF;
@@ -2431,7 +2454,7 @@ skip_exp:
 
 }
 
-void IsAnyMonHoldingExpShare(void){
+void IsAnyMonHoldingExpShare(void) {
     LD_A_addr(wPartyCount);
     LD_B_A;
     LD_HL(wPartyMon1);
@@ -2492,14 +2515,14 @@ okay:
 
 }
 
-void StopDangerSound(void){
+void StopDangerSound(void) {
     XOR_A_A;
     LD_addr_A(wLowHealthAlarm);
     RET;
 
 }
 
-void FaintYourPokemon(void){
+void FaintYourPokemon(void) {
     CALL(aStopDangerSound);
     CALL(aWaitSFX);
     LD_A(0xf0);
@@ -2515,7 +2538,7 @@ void FaintYourPokemon(void){
 
 }
 
-void FaintEnemyPokemon(void){
+void FaintEnemyPokemon(void) {
     CALL(aWaitSFX);
     LD_DE(SFX_KINESIS);
     CALL(aPlaySFX);
@@ -2530,7 +2553,7 @@ void FaintEnemyPokemon(void){
 
 }
 
-void CheckEnemyTrainerDefeated(void){
+void CheckEnemyTrainerDefeated(void) {
     LD_A_addr(wOTPartyCount);
     LD_B_A;
     XOR_A_A;
@@ -2552,7 +2575,7 @@ loop:
 
 }
 
-void HandleEnemySwitch(void){
+void HandleEnemySwitch(void) {
     LD_HL(wEnemyHPPal);
     LD_E(HP_BAR_LENGTH_PX);
     CALL(aUpdateHPPal);
@@ -2565,7 +2588,7 @@ void HandleEnemySwitch(void){
     CALL(aLinkBattleSendReceiveAction);
     LD_A_addr(wBattleAction);
     CP_A(BATTLEACTION_FORFEIT);
-    RET_Z ;
+    RET_Z;
 
     CALL(aSafeLoadTempTilemapToTilemap);
 
@@ -2575,13 +2598,13 @@ not_linked:
     LD_A_hli;
     OR_A_hl;
     LD_A(0x0);
-    JR_NZ (mEnemyPartyMonEntrance);
+    JR_NZ(mEnemyPartyMonEntrance);
     INC_A;
     RET;
 
 }
 
-void EnemyPartyMonEntrance(void){
+void EnemyPartyMonEntrance(void) {
     PUSH_AF;
     XOR_A_A;
     LD_addr_A(wEnemySwitchMonIndex);
@@ -2610,8 +2633,8 @@ done_switch:
 
 }
 
-void WinTrainerBattle(void){
-//  Player won the battle
+void WinTrainerBattle(void) {
+    //  Player won the battle
     CALL(aStopDangerSound);
     LD_A(0x1);
     LD_addr_A(wBattleLowHealthAlarm);
@@ -2619,7 +2642,7 @@ void WinTrainerBattle(void){
     LD_A_addr(wLinkMode);
     AND_A_A;
     LD_A_B;
-    CALL_Z (aPlayVictoryMusic);
+    CALL_Z(aPlayVictoryMusic);
     CALLFAR(aBattle_GetTrainerName);
     LD_HL(mBattleText_EnemyWasDefeated);
     CALL(aStdBattleTextbox);
@@ -2628,7 +2651,7 @@ void WinTrainerBattle(void){
     IF_Z goto mobile;
     LD_A_addr(wLinkMode);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
 
     LD_A_addr(wInBattleTowerBattle);
     BIT_A(0);
@@ -2677,7 +2700,7 @@ battle_tower:
     OR_A_hl;
     INC_HL;
     OR_A_hl;
-    RET_NZ ;
+    RET_NZ;
     CALL(aClearTilemap);
     CALL(aClearBGPalettes);
     RET;
@@ -2686,7 +2709,7 @@ battle_tower:
 give_money:
     LD_A_addr(wAmuletCoin);
     AND_A_A;
-    CALL_NZ (aWinTrainerBattle_DoubleReward);
+    CALL_NZ(aWinTrainerBattle_DoubleReward);
     CALL(aWinTrainerBattle_CheckMaxedOutMomMoney);
     PUSH_AF;
     LD_A(FALSE);
@@ -2771,7 +2794,7 @@ DoubleReward:
     RL_hl;
     DEC_HL;
     RL_hl;
-    RET_NC ;
+    RET_NC;
     LD_A(0xff);
     LD_hli_A;
     LD_hli_A;
@@ -2780,10 +2803,10 @@ DoubleReward:
 
 
 SentToMomTexts:
-//  entries correspond to MOM_SAVING_* constants
-    //dw ['SentSomeToMomText'];
-    //dw ['SentHalfToMomText'];
-    //dw ['SentAllToMomText'];
+    //  entries correspond to MOM_SAVING_* constants
+        //dw ['SentSomeToMomText'];
+        //dw ['SentHalfToMomText'];
+        //dw ['SentAllToMomText'];
 
 
 CheckMaxedOutMomMoney:
@@ -2798,7 +2821,7 @@ CheckMaxedOutMomMoney:
 
 }
 
-void AddBattleMoneyToAccount(void){
+void AddBattleMoneyToAccount(void) {
     LD_C(3);
     AND_A_A;
     PUSH_DE;
@@ -2825,7 +2848,7 @@ loop:
     SBC_A(HIGH(MAX_MONEY));  // mid
     LD_A_hl;
     SBC_A(HIGH(MAX_MONEY >> 8));
-    RET_C ;
+    RET_C;
     LD_hl(HIGH(MAX_MONEY >> 8));
     INC_HL;
     LD_hl(HIGH(MAX_MONEY));  // mid
@@ -2835,7 +2858,7 @@ loop:
 
 }
 
-void PlayVictoryMusic(void){
+void PlayVictoryMusic(void) {
     PUSH_DE;
     LD_DE(MUSIC_NONE);
     CALL(aPlayMusic);
@@ -2875,18 +2898,18 @@ lost:
 
 }
 
-void IsKantoGymLeader(void){
+void IsKantoGymLeader(void) {
     LD_HL(mKantoGymLeaders);
     JR(mIsGymLeaderCommon);
 
 }
 
-void IsGymLeader(void){
+void IsGymLeader(void) {
     LD_HL(mGymLeaders);
     return IsGymLeaderCommon();
 }
 
-void IsGymLeaderCommon(void){
+void IsGymLeaderCommon(void) {
     PUSH_DE;
     LD_A_addr(wOtherTrainerClass);
     LD_DE(1);
@@ -2894,24 +2917,24 @@ void IsGymLeaderCommon(void){
     POP_DE;
     RET;
 
-// INCLUDE "data/trainers/leaders.asm"
+    // INCLUDE "data/trainers/leaders.asm"
 
     return HandlePlayerMonFaint();
 }
 
-void HandlePlayerMonFaint(void){
+void HandlePlayerMonFaint(void) {
     CALL(aFaintYourPokemon);
     LD_HL(wEnemyMonHP);
     LD_A_hli;
     OR_A_hl;
-    CALL_Z (aFaintEnemyPokemon);
+    CALL_Z(aFaintEnemyPokemon);
     LD_A(0x1);
     LD_addr_A(wWhichMonFaintedFirst);
     CALL(aUpdateFaintedPlayerMon);
     CALL(aCheckPlayerPartyForFitMon);
     LD_A_D;
     AND_A_A;
-    JP_Z (mLostBattle);
+    JP_Z(mLostBattle);
     LD_HL(wEnemyMonHP);
     LD_A_hli;
     OR_A_hl;
@@ -2927,7 +2950,7 @@ void HandlePlayerMonFaint(void){
 
 trainer:
     CALL(aCheckEnemyTrainerDefeated);
-    JP_Z (mWinTrainerBattle);
+    JP_Z(mWinTrainerBattle);
 
 
 notfainted:
@@ -2941,19 +2964,19 @@ notfainted:
 switchout:
     CALL(aForcePlayerMonChoice);
     CALL(aCheckMobileBattleError);
-    JP_C (mWildFled_EnemyFled_LinkBattleCanceled);
+    JP_C(mWildFled_EnemyFled_LinkBattleCanceled);
     LD_A_C;
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     LD_A(BATTLEPLAYERACTION_USEITEM);
     LD_addr_A(wBattlePlayerAction);
     CALL(aHandleEnemySwitch);
-    JP_Z (mWildFled_EnemyFled_LinkBattleCanceled);
+    JP_Z(mWildFled_EnemyFled_LinkBattleCanceled);
     JP(mDoubleSwitch);
 
 }
 
-void UpdateFaintedPlayerMon(void){
+void UpdateFaintedPlayerMon(void) {
     LD_A_addr(wCurBattleMon);
     LD_C_A;
     LD_HL(wBattleParticipantsNotFainted);
@@ -2969,7 +2992,7 @@ void UpdateFaintedPlayerMon(void){
     LD_addr_A(wBattleMonStatus);
     CALL(aUpdateBattleMonInParty);
     LD_C(HAPPINESS_FAINTED);
-// If TheirLevel > (YourLevel + 30), use a different parameter
+    // If TheirLevel > (YourLevel + 30), use a different parameter
     LD_A_addr(wBattleMonLevel);
     ADD_A(30);
     LD_B_A;
@@ -2989,21 +3012,21 @@ got_param:
     LD_addr_A(wBattleResult);
     LD_A_addr(wWhichMonFaintedFirst);
     AND_A_A;
-    RET_Z ;
-// code was probably dummied out here
+    RET_Z;
+    // code was probably dummied out here
     RET;
 
 }
 
-void AskUseNextPokemon(void){
+void AskUseNextPokemon(void) {
     CALL(aEmptyBattleTextbox);
     CALL(aLoadTilemapToTempTilemap);
-//  We don't need to be here if we're in a Trainer battle,
-//  as that decision is made for us.
+    //  We don't need to be here if we're in a Trainer battle,
+    //  as that decision is made for us.
     LD_A_addr(wBattleMode);
     AND_A_A;
     DEC_A;
-    RET_NZ ;
+    RET_NZ;
 
     LD_HL(mBattleText_UseNextMon);
     CALL(aStdBattleTextbox);
@@ -3027,7 +3050,7 @@ pressed_b:
 
 }
 
-void ForcePlayerMonChoice(void){
+void ForcePlayerMonChoice(void) {
     CALL(aEmptyBattleTextbox);
     CALL(aLoadStandardMenuHeader);
     CALL(aSetUpBattlePartyMenu);
@@ -3095,7 +3118,7 @@ send_out_pokemon:
 
 }
 
-void PlayerPartyMonEntrance(void){
+void PlayerPartyMonEntrance(void) {
     LD_A_addr(wCurBattleMon);
     LD_addr_A(wLastPlayerMon);
     LD_A_addr(wCurPartyMon);
@@ -3114,7 +3137,7 @@ void PlayerPartyMonEntrance(void){
 
 }
 
-void CheckMobileBattleError(void){
+void CheckMobileBattleError(void) {
     LD_A_addr(wLinkMode);
     CP_A(LINK_MOBILE);
     IF_NZ goto not_mobile;  // It's not a mobile battle
@@ -3123,7 +3146,7 @@ void CheckMobileBattleError(void){
     AND_A_A;
     IF_Z goto not_mobile;
 
-//  We have a mobile battle and something else happened
+    //  We have a mobile battle and something else happened
     SCF;
     RET;
 
@@ -3134,20 +3157,20 @@ not_mobile:
 
 }
 
-void IsMobileBattle(void){
+void IsMobileBattle(void) {
     LD_A_addr(wLinkMode);
     CP_A(LINK_MOBILE);
     RET;
 
 }
 
-void SetUpBattlePartyMenu(void){
+void SetUpBattlePartyMenu(void) {
     CALL(aClearBGPalettes);
     return SetUpBattlePartyMenu_Loop();
 }
 
-void SetUpBattlePartyMenu_Loop(void){
-//  //  switch to fullscreen menu?
+void SetUpBattlePartyMenu_Loop(void) {
+    //  //  switch to fullscreen menu?
     FARCALL(aLoadPartyMenuGFX);
     FARCALL(aInitPartyMenuWithCancel);
     FARCALL(aInitPartyMenuBGPal7);
@@ -3156,7 +3179,7 @@ void SetUpBattlePartyMenu_Loop(void){
 
 }
 
-void JumpToPartyMenuAndPrintText(void){
+void JumpToPartyMenuAndPrintText(void) {
     FARCALL(aWritePartyMenuTilemap);
     FARCALL(aPrintPartyMenuText);
     CALL(aWaitBGMap);
@@ -3166,7 +3189,7 @@ void JumpToPartyMenuAndPrintText(void){
 
 }
 
-void SelectBattleMon(void){
+void SelectBattleMon(void) {
     CALL(aIsMobileBattle);
     IF_Z goto mobile;
     FARCALL(aPartyMenuSelect);
@@ -3179,14 +3202,14 @@ mobile:
 
 }
 
-void PickPartyMonInBattle(void){
+void PickPartyMonInBattle(void) {
 
 loop:
     LD_A(PARTYMENUACTION_SWITCH);  // Which PKMN?
     LD_addr_A(wPartyMenuActionText);
     CALL(aJumpToPartyMenuAndPrintText);
     CALL(aSelectBattleMon);
-    RET_C ;
+    RET_C;
     CALL(aCheckIfCurPartyMonIsFitToFight);
     IF_Z goto loop;
     XOR_A_A;
@@ -3194,7 +3217,7 @@ loop:
 
 }
 
-void SwitchMonAlreadyOut(void){
+void SwitchMonAlreadyOut(void) {
     LD_HL(wCurBattleMon);
     LD_A_addr(wCurPartyMon);
     CP_A_hl;
@@ -3212,15 +3235,15 @@ notout:
 
 }
 
-void ForcePickPartyMonInBattle(void){
-//  Can't back out.
+void ForcePickPartyMonInBattle(void) {
+    //  Can't back out.
 
 
 pick:
     CALL(aPickPartyMonInBattle);
-    RET_NC ;
+    RET_NC;
     CALL(aCheckMobileBattleError);
-    RET_C ;
+    RET_C;
 
     LD_DE(SFX_WRONG);
     CALL(aPlaySFX);
@@ -3230,11 +3253,11 @@ pick:
     return PickSwitchMonInBattle();
 }
 
-void PickSwitchMonInBattle(void){
+void PickSwitchMonInBattle(void) {
 
 pick:
     CALL(aPickPartyMonInBattle);
-    RET_C ;
+    RET_C;
     CALL(aSwitchMonAlreadyOut);
     IF_C goto pick;
     XOR_A_A;
@@ -3242,14 +3265,14 @@ pick:
 
 }
 
-void ForcePickSwitchMonInBattle(void){
-//  Can't back out.
+void ForcePickSwitchMonInBattle(void) {
+    //  Can't back out.
 
 
 pick:
     CALL(aForcePickPartyMonInBattle);
     CALL(aCheckMobileBattleError);
-    RET_C ;
+    RET_C;
     CALL(aSwitchMonAlreadyOut);
     IF_C goto pick;
 
@@ -3258,7 +3281,7 @@ pick:
 
 }
 
-void LostBattle(void){
+void LostBattle(void) {
     LD_A(1);
     LD_addr_A(wBattleEnded);
 
@@ -3270,7 +3293,7 @@ void LostBattle(void){
     CP_A(BATTLETYPE_CANLOSE);
     IF_NZ goto not_canlose;
 
-//  Remove the enemy from the screen.
+    //  Remove the enemy from the screen.
     hlcoord(0, 0, wTilemap);
     LD_BC((8 << 8) | 21);
     CALL(aClearBox);
@@ -3289,7 +3312,7 @@ skip_win_loss_text:
 
 
 battle_tower:
-//  Remove the enemy from the screen.
+    //  Remove the enemy from the screen.
     hlcoord(0, 0, wTilemap);
     LD_BC((8 << 8) | 21);
     CALL(aClearBox);
@@ -3312,7 +3335,7 @@ not_canlose:
     AND_A_A;
     IF_NZ goto LostLinkBattle;
 
-//  Grayscale
+    //  Grayscale
     LD_B(SCGB_BATTLE_GRAYSCALE);
     CALL(aGetSGBLayout);
     CALL(aSetPalettes);
@@ -3347,7 +3370,7 @@ end:
 
 
 mobile:
-//  Remove the enemy from the screen.
+    //  Remove the enemy from the screen.
     hlcoord(0, 0, wTilemap);
     LD_BC((8 << 8) | 21);
     CALL(aClearBox);
@@ -3363,21 +3386,21 @@ mobile:
 
 }
 
-void EnemyMonFaintedAnimation(void){
+void EnemyMonFaintedAnimation(void) {
     hlcoord(12, 5, wTilemap);
     decoord(12, 6, wTilemap);
     JP(mMonFaintedAnimation);
 
 }
 
-void PlayerMonFaintedAnimation(void){
+void PlayerMonFaintedAnimation(void) {
     hlcoord(1, 10, wTilemap);
     decoord(1, 11, wTilemap);
     JP(mMonFaintedAnimation);
 
 }
 
-void MonFaintedAnimation(void){
+void MonFaintedAnimation(void) {
     LD_A_addr(wJoypadDisable);
     PUSH_AF;
     SET_A(JOYPAD_DISABLE_MON_FAINT_F);
@@ -3437,7 +3460,7 @@ Spaces:
     return SlideBattlePicOut();
 }
 
-void SlideBattlePicOut(void){
+void SlideBattlePicOut(void) {
     LDH_addr_A(hMapObjectIndex);
     LD_C_A;
 
@@ -3488,7 +3511,7 @@ back:
 
 }
 
-void ForceEnemySwitch(void){
+void ForceEnemySwitch(void) {
     CALL(aResetEnemyBattleVars);
     LD_A_addr(wEnemySwitchMonIndex);
     DEC_A;
@@ -3504,17 +3527,17 @@ void ForceEnemySwitch(void){
 
 }
 
-void EnemySwitch(void){
+void EnemySwitch(void) {
     CALL(aCheckWhetherToAskSwitch);
-    JR_NC (mEnemySwitch_SetMode);
-// Shift Mode
+    JR_NC(mEnemySwitch_SetMode);
+    // Shift Mode
     CALL(aResetEnemyBattleVars);
     CALL(aCheckWhetherSwitchmonIsPredetermined);
     IF_C goto skip;
     CALL(aFindMonInOTPartyToSwitchIntoBattle);
 
 skip:
-// 'b' contains the PartyNr of the mon the AI will switch to
+    // 'b' contains the PartyNr of the mon the AI will switch to
     CALL(aLoadEnemyMonToSwitchTo);
     CALL(aOfferSwitch);
     PUSH_AF;
@@ -3522,8 +3545,8 @@ skip:
     CALL(aShowBattleTextEnemySentOut);
     CALL(aShowSetEnemyMonAndSendOutAnimation);
     POP_AF;
-    RET_C ;
-// If we're here, then we're switching too
+    RET_C;
+    // If we're here, then we're switching too
     XOR_A_A;
     LD_addr_A(wBattleParticipantsNotFainted);
     LD_addr_A(wBattleParticipantsIncludingFainted);
@@ -3535,14 +3558,14 @@ skip:
 
 }
 
-void EnemySwitch_SetMode(void){
+void EnemySwitch_SetMode(void) {
     CALL(aResetEnemyBattleVars);
     CALL(aCheckWhetherSwitchmonIsPredetermined);
     IF_C goto skip;
     CALL(aFindMonInOTPartyToSwitchIntoBattle);
 
 skip:
-// 'b' contains the PartyNr of the mon the AI will switch to
+    // 'b' contains the PartyNr of the mon the AI will switch to
     CALL(aLoadEnemyMonToSwitchTo);
     LD_A(1);
     LD_addr_A(wEnemyIsSwitching);
@@ -3552,9 +3575,9 @@ skip:
 
 }
 
-void CheckWhetherSwitchmonIsPredetermined(void){
-//  returns the enemy switchmon index in b, or
-//  returns carry if the index is not yet determined.
+void CheckWhetherSwitchmonIsPredetermined(void) {
+    //  returns the enemy switchmon index in b, or
+    //  returns carry if the index is not yet determined.
     LD_A_addr(wLinkMode);
     AND_A_A;
     IF_Z goto not_linked;
@@ -3591,8 +3614,8 @@ return_carry:
 
 }
 
-void ResetEnemyBattleVars(void){
-//  and draw empty Textbox
+void ResetEnemyBattleVars(void) {
+    //  and draw empty Textbox
     XOR_A_A;
     LD_addr_A(wLastPlayerCounterMove);
     LD_addr_A(wLastEnemyCounterMove);
@@ -3610,14 +3633,14 @@ void ResetEnemyBattleVars(void){
 
 }
 
-void ResetBattleParticipants(void){
+void ResetBattleParticipants(void) {
     XOR_A_A;
     LD_addr_A(wBattleParticipantsNotFainted);
     LD_addr_A(wBattleParticipantsIncludingFainted);
     return AddBattleParticipant();
 }
 
-void AddBattleParticipant(void){
+void AddBattleParticipant(void) {
     LD_A_addr(wCurBattleMon);
     LD_C_A;
     LD_HL(wBattleParticipantsNotFainted);
@@ -3631,7 +3654,7 @@ void AddBattleParticipant(void){
     return FindMonInOTPartyToSwitchIntoBattle();
 }
 
-void FindMonInOTPartyToSwitchIntoBattle(void){
+void FindMonInOTPartyToSwitchIntoBattle(void) {
     LD_B(-1);
     LD_A(0b000001);
     LD_addr_A(wEnemyEffectivenessVsPlayerMons);
@@ -3645,7 +3668,7 @@ loop:
     INC_B;
     LD_A_addr(wOTPartyCount);
     CP_A_B;
-    JP_Z (mScoreMonTypeMatchups);
+    JP_Z(mScoreMonTypeMatchups);
     LD_A_addr(wCurOTMon);
     CP_A_B;
     IF_Z goto discourage;
@@ -3672,7 +3695,7 @@ discourage:
     return LookUpTheEffectivenessOfEveryMove();
 }
 
-void LookUpTheEffectivenessOfEveryMove(void){
+void LookUpTheEffectivenessOfEveryMove(void) {
     PUSH_BC;
     LD_HL(wOTPartyMon1Moves);
     LD_A_B;
@@ -3713,9 +3736,9 @@ done:
 
 }
 
-void IsThePlayerMonTypesEffectiveAgainstOTMon(void){
-//  Calculates the effectiveness of the types of the PlayerMon
-//  against the OTMon
+void IsThePlayerMonTypesEffectiveAgainstOTMon(void) {
+    //  Calculates the effectiveness of the types of the PlayerMon
+    //  against the OTMon
     PUSH_BC;
     LD_HL(wOTPartyCount);
     LD_A_B;
@@ -3765,7 +3788,7 @@ reset:
 
 }
 
-void ScoreMonTypeMatchups(void){
+void ScoreMonTypeMatchups(void) {
 
 loop1:
     LD_HL(wEnemyEffectivenessVsPlayerMons);
@@ -3839,8 +3862,8 @@ quit:
 
 }
 
-void LoadEnemyMonToSwitchTo(void){
-// 'b' contains the PartyNr of the mon the AI will switch to
+void LoadEnemyMonToSwitchTo(void) {
+    // 'b' contains the PartyNr of the mon the AI will switch to
     LD_A_B;
     LD_addr_A(wCurPartyMon);
     LD_HL(wOTPartyMon1Level);
@@ -3880,16 +3903,16 @@ skip_unown:
 
 }
 
-void CheckWhetherToAskSwitch(void){
+void CheckWhetherToAskSwitch(void) {
     LD_A_addr(wBattleHasJustStarted);
     DEC_A;
-    JP_Z (mCheckWhetherToAskSwitch_return_nc);
+    JP_Z(mCheckWhetherToAskSwitch_return_nc);
     LD_A_addr(wPartyCount);
     DEC_A;
-    JP_Z (mCheckWhetherToAskSwitch_return_nc);
+    JP_Z(mCheckWhetherToAskSwitch_return_nc);
     LD_A_addr(wLinkMode);
     AND_A_A;
-    JP_NZ (mCheckWhetherToAskSwitch_return_nc);
+    JP_NZ(mCheckWhetherToAskSwitch_return_nc);
     LD_A_addr(wOptions);
     BIT_A(BATTLE_SHIFT);
     IF_NZ goto return_nc;
@@ -3912,7 +3935,7 @@ return_nc:
 
 }
 
-void OfferSwitch(void){
+void OfferSwitch(void) {
     LD_A_addr(wCurPartyMon);
     PUSH_AF;
     CALLFAR(aBattle_GetTrainerName);
@@ -3956,7 +3979,7 @@ said_no:
 
 }
 
-void ClearEnemyMonBox(void){
+void ClearEnemyMonBox(void) {
     XOR_A_A;
     LDH_addr_A(hBGMapMode);
     CALL(aExitMenu);
@@ -3969,7 +3992,7 @@ void ClearEnemyMonBox(void){
 
 }
 
-void ShowBattleTextEnemySentOut(void){
+void ShowBattleTextEnemySentOut(void) {
     CALLFAR(aBattle_GetTrainerName);
     LD_HL(mBattleText_EnemySentOut);
     CALL(aStdBattleTextbox);
@@ -3977,7 +4000,7 @@ void ShowBattleTextEnemySentOut(void){
 
 }
 
-void ShowSetEnemyMonAndSendOutAnimation(void){
+void ShowSetEnemyMonAndSendOutAnimation(void) {
     LD_A_addr(wTempEnemyMonSpecies);
     LD_addr_A(wCurPartySpecies);
     LD_addr_A(wCurSpecies);
@@ -4033,14 +4056,14 @@ skip_cry:
 
 }
 
-void NewEnemyMonStatus(void){
+void NewEnemyMonStatus(void) {
     XOR_A_A;
     LD_addr_A(wLastPlayerCounterMove);
     LD_addr_A(wLastEnemyCounterMove);
     LD_addr_A(wLastEnemyMove);
     LD_HL(wEnemySubStatus1);
-    for(int rept = 0; rept < 4; rept++){
-    LD_hli_A;
+    for (int rept = 0; rept < 4; rept++) {
+        LD_hli_A;
     }
     LD_hl_A;
     LD_addr_A(wEnemyDisableCount);
@@ -4058,7 +4081,7 @@ void NewEnemyMonStatus(void){
 
 }
 
-void ResetEnemyStatLevels(void){
+void ResetEnemyStatLevels(void) {
     LD_A(BASE_STAT_LEVEL);
     LD_B(NUM_LEVEL_STATS);
     LD_HL(wEnemyStatLevels);
@@ -4071,8 +4094,8 @@ loop:
 
 }
 
-void CheckPlayerPartyForFitMon(void){
-//  Has the player any mon in his Party that can fight?
+void CheckPlayerPartyForFitMon(void) {
+    //  Has the player any mon in his Party that can fight?
     LD_A_addr(wPartyCount);
     LD_E_A;
     XOR_A_A;
@@ -4091,13 +4114,13 @@ loop:
 
 }
 
-void CheckIfCurPartyMonIsFitToFight(void){
+void CheckIfCurPartyMonIsFitToFight(void) {
     LD_A_addr(wCurPartyMon);
     LD_HL(wPartyMon1HP);
     CALL(aGetPartyLocation);
     LD_A_hli;
     OR_A_hl;
-    RET_NZ ;
+    RET_NZ;
 
     LD_A_addr(wBattleHasJustStarted);
     AND_A_A;
@@ -4125,37 +4148,37 @@ finish_fail:
 
 }
 
-void TryToRunAwayFromBattle(void){
-//  Run away from battle, with or without item
+void TryToRunAwayFromBattle(void) {
+    //  Run away from battle, with or without item
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_DEBUG);
-    JP_Z (mTryToRunAwayFromBattle_can_escape);
+    JP_Z(mTryToRunAwayFromBattle_can_escape);
     CP_A(BATTLETYPE_CONTEST);
-    JP_Z (mTryToRunAwayFromBattle_can_escape);
+    JP_Z(mTryToRunAwayFromBattle_can_escape);
     CP_A(BATTLETYPE_TRAP);
-    JP_Z (mTryToRunAwayFromBattle_cant_escape);
+    JP_Z(mTryToRunAwayFromBattle_cant_escape);
     CP_A(BATTLETYPE_CELEBI);
-    JP_Z (mTryToRunAwayFromBattle_cant_escape);
+    JP_Z(mTryToRunAwayFromBattle_cant_escape);
     CP_A(BATTLETYPE_SHINY);
-    JP_Z (mTryToRunAwayFromBattle_cant_escape);
+    JP_Z(mTryToRunAwayFromBattle_cant_escape);
     CP_A(BATTLETYPE_SUICUNE);
-    JP_Z (mTryToRunAwayFromBattle_cant_escape);
+    JP_Z(mTryToRunAwayFromBattle_cant_escape);
 
     LD_A_addr(wLinkMode);
     AND_A_A;
-    JP_NZ (mTryToRunAwayFromBattle_can_escape);
+    JP_NZ(mTryToRunAwayFromBattle_can_escape);
 
     LD_A_addr(wBattleMode);
     DEC_A;
-    JP_NZ (mTryToRunAwayFromBattle_cant_run_from_trainer);
+    JP_NZ(mTryToRunAwayFromBattle_cant_run_from_trainer);
 
     LD_A_addr(wEnemySubStatus5);
     BIT_A(SUBSTATUS_CANT_RUN);
-    JP_NZ (mTryToRunAwayFromBattle_cant_escape);
+    JP_NZ(mTryToRunAwayFromBattle_cant_escape);
 
     LD_A_addr(wPlayerWrapCount);
     AND_A_A;
-    JP_NZ (mTryToRunAwayFromBattle_cant_escape);
+    JP_NZ(mTryToRunAwayFromBattle_cant_escape);
 
     PUSH_HL;
     PUSH_DE;
@@ -4281,7 +4304,7 @@ can_escape:
     CALL(aCheckMobileBattleError);
     IF_C goto mobile;
 
-// Got away safely
+    // Got away safely
     LD_A_addr(wBattleAction);
     CP_A(BATTLEACTION_FORFEIT);
     LD_A(DRAW);
@@ -4325,7 +4348,7 @@ skip_link_error:
 
 }
 
-void InitBattleMon(void){
+void InitBattleMon(void) {
     LD_A(MON_SPECIES);
     CALL(aGetPartyParamLocation);
     LD_DE(wBattleMonSpecies);
@@ -4367,19 +4390,19 @@ void InitBattleMon(void){
 
 }
 
-void BattleCheckPlayerShininess(void){
+void BattleCheckPlayerShininess(void) {
     CALL(aGetPartyMonDVs);
     JR(mBattleCheckShininess);
 
 }
 
-void BattleCheckEnemyShininess(void){
+void BattleCheckEnemyShininess(void) {
     CALL(aGetEnemyMonDVs);
 
     return BattleCheckShininess();
 }
 
-void BattleCheckShininess(void){
+void BattleCheckShininess(void) {
     LD_B_H;
     LD_C_L;
     CALLFAR(aCheckShininess);
@@ -4387,33 +4410,33 @@ void BattleCheckShininess(void){
 
 }
 
-void GetPartyMonDVs(void){
+void GetPartyMonDVs(void) {
     LD_HL(wBattleMonDVs);
     LD_A_addr(wPlayerSubStatus5);
     BIT_A(SUBSTATUS_TRANSFORMED);
-    RET_Z ;
+    RET_Z;
     LD_HL(wPartyMon1DVs);
     LD_A_addr(wCurBattleMon);
     JP(mGetPartyLocation);
 
 }
 
-void GetEnemyMonDVs(void){
+void GetEnemyMonDVs(void) {
     LD_HL(wEnemyMonDVs);
     LD_A_addr(wEnemySubStatus5);
     BIT_A(SUBSTATUS_TRANSFORMED);
-    RET_Z ;
+    RET_Z;
     LD_HL(wEnemyBackupDVs);
     LD_A_addr(wBattleMode);
     DEC_A;
-    RET_Z ;
+    RET_Z;
     LD_HL(wOTPartyMon1DVs);
     LD_A_addr(wCurOTMon);
     JP(mGetPartyLocation);
 
 }
 
-void ResetPlayerStatLevels(void){
+void ResetPlayerStatLevels(void) {
     LD_A(BASE_STAT_LEVEL);
     LD_B(NUM_LEVEL_STATS);
     LD_HL(wPlayerStatLevels);
@@ -4426,7 +4449,7 @@ loop:
 
 }
 
-void InitEnemyMon(void){
+void InitEnemyMon(void) {
     LD_A_addr(wCurPartyMon);
     LD_HL(wOTPartyMon1Species);
     CALL(aGetPartyLocation);
@@ -4465,8 +4488,8 @@ void InitEnemyMon(void){
     INC_DE;
     LD_A_hl;
     LD_de_A;
-// The enemy mon's base Sp. Def isn't needed since its base
-// Sp. Atk is also used to calculate Sp. Def stat experience.
+    // The enemy mon's base Sp. Def isn't needed since its base
+    // Sp. Atk is also used to calculate Sp. Def stat experience.
     LD_HL(wBaseStats);
     LD_DE(wEnemyMonBaseStats);
     LD_B(NUM_STATS - 1);
@@ -4483,7 +4506,7 @@ loop:
 
 }
 
-void SwitchPlayerMon(void){
+void SwitchPlayerMon(void) {
     CALL(aClearSprites);
     LD_A_addr(wCurBattleMon);
     LD_addr_A(wLastPlayerMon);
@@ -4504,7 +4527,7 @@ void SwitchPlayerMon(void){
 
 }
 
-void SendOutPlayerMon(void){
+void SendOutPlayerMon(void) {
     LD_HL(wBattleMonDVs);
     PREDEF(pGetUnownLetter);
     hlcoord(1, 5, wTilemap);
@@ -4563,14 +4586,14 @@ statused:
 
 }
 
-void NewBattleMonStatus(void){
+void NewBattleMonStatus(void) {
     XOR_A_A;
     LD_addr_A(wLastPlayerCounterMove);
     LD_addr_A(wLastEnemyCounterMove);
     LD_addr_A(wLastPlayerMove);
     LD_HL(wPlayerSubStatus1);
-    for(int rept = 0; rept < 4; rept++){
-    LD_hli_A;
+    for (int rept = 0; rept < 4; rept++) {
+        LD_hli_A;
     }
     LD_hl_A;
     LD_HL(wPlayerUsedMoves);
@@ -4593,7 +4616,7 @@ void NewBattleMonStatus(void){
 
 }
 
-void BreakAttraction(void){
+void BreakAttraction(void) {
     LD_HL(wPlayerSubStatus1);
     RES_hl(SUBSTATUS_IN_LOVE);
     LD_HL(wEnemySubStatus1);
@@ -4602,7 +4625,7 @@ void BreakAttraction(void){
 
 }
 
-void SpikesDamage(void){
+void SpikesDamage(void) {
     LD_HL(wPlayerScreens);
     LD_DE(wBattleMonType);
     LD_BC(mUpdatePlayerHUD);
@@ -4616,16 +4639,16 @@ void SpikesDamage(void){
 ok:
 
     BIT_hl(SCREENS_SPIKES);
-    RET_Z ;
+    RET_Z;
 
-// Flying-types aren't affected by Spikes.
+    // Flying-types aren't affected by Spikes.
     LD_A_de;
     CP_A(FLYING);
-    RET_Z ;
+    RET_Z;
     INC_DE;
     LD_A_de;
     CP_A(FLYING);
-    RET_Z ;
+    RET_Z;
 
     PUSH_BC;
 
@@ -4646,7 +4669,7 @@ hl:
 
 }
 
-void PursuitSwitch(void){
+void PursuitSwitch(void) {
     LD_A(BATTLE_VARS_MOVE);
     CALL(aGetBattleVar);
     LD_B_A;
@@ -4731,7 +4754,7 @@ done:
 
 }
 
-void RecallPlayerMon(void){
+void RecallPlayerMon(void) {
     LDH_A_addr(hBattleTurn);
     PUSH_AF;
     XOR_A_A;
@@ -4745,7 +4768,7 @@ void RecallPlayerMon(void){
 
 }
 
-void HandleHealingItems(void){
+void HandleHealingItems(void) {
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto player_1;
@@ -4771,11 +4794,11 @@ player_1:
 
 }
 
-void HandleHPHealingItem(void){
+void HandleHPHealingItem(void) {
     CALLFAR(aGetOpponentItem);
     LD_A_B;
     CP_A(HELD_BERRY);
-    RET_NZ ;
+    RET_NZ;
     LD_DE(wEnemyMonHP + 1);
     LD_HL(wEnemyMonMaxHP);
     LDH_A_addr(hBattleTurn);
@@ -4786,8 +4809,8 @@ void HandleHPHealingItem(void){
 
 
 go:
-//  If, and only if, Pokemon's HP is less than half max, use the item.
-//  Store current HP in Buffer 3/4
+    //  If, and only if, Pokemon's HP is less than half max, use the item.
+    //  Store current HP in Buffer 3/4
     PUSH_BC;
     LD_A_de;
     LD_addr_A(wHPBuffer2);
@@ -4812,12 +4835,12 @@ equal:
     INC_HL;
     CP_A_hl;
     DEC_HL;
-    RET_NC ;
+    RET_NC;
 
 
 less:
     CALL(aItemRecoveryAnim);
-// store max HP in wHPBuffer1
+    // store max HP in wHPBuffer1
     LD_A_hli;
     LD_addr_A(wHPBuffer1 + 1);
     LD_A_hl;
@@ -4862,7 +4885,7 @@ got_hp_bar_coords:
     return UseOpponentItem();
 }
 
-void UseOpponentItem(void){
+void UseOpponentItem(void) {
     CALL(aRefreshBattleHuds);
     CALLFAR(aGetOpponentItem);
     LD_A_hl;
@@ -4874,7 +4897,7 @@ void UseOpponentItem(void){
 
 }
 
-void ItemRecoveryAnim(void){
+void ItemRecoveryAnim(void) {
     PUSH_HL;
     PUSH_DE;
     PUSH_BC;
@@ -4894,14 +4917,14 @@ void ItemRecoveryAnim(void){
 
 }
 
-void UseHeldStatusHealingItem(void){
+void UseHeldStatusHealingItem(void) {
     CALLFAR(aGetOpponentItem);
     LD_HL(mHeldStatusHealingEffects);
 
 loop:
     LD_A_hli;
     CP_A(0xff);
-    RET_Z ;
+    RET_Z;
     INC_HL;
     CP_A_B;
     IF_NZ goto loop;
@@ -4910,7 +4933,7 @@ loop:
     LD_A(BATTLE_VARS_STATUS_OPP);
     CALL(aGetBattleVarAddr);
     AND_A_B;
-    RET_Z ;
+    RET_Z;
     XOR_A_A;
     LD_hl_A;
     PUSH_BC;
@@ -4951,22 +4974,22 @@ got_pointer:
     AND_A_A;
     RET;
 
-// INCLUDE "data/battle/held_heal_status.asm"
+    // INCLUDE "data/battle/held_heal_status.asm"
 
     return UseConfusionHealingItem();
 }
 
-void UseConfusionHealingItem(void){
+void UseConfusionHealingItem(void) {
     LD_A(BATTLE_VARS_SUBSTATUS3_OPP);
     CALL(aGetBattleVar);
     BIT_A(SUBSTATUS_CONFUSED);
-    RET_Z ;
+    RET_Z;
     CALLFAR(aGetOpponentItem);
     LD_A_B;
     CP_A(HELD_HEAL_CONFUSION);
     IF_Z goto heal_status;
     CP_A(HELD_HEAL_STATUS);
-    RET_NZ ;
+    RET_NZ;
 
 
 heal_status:
@@ -4987,7 +5010,7 @@ heal_status:
     LD_bc_A;
     LD_A_addr(wBattleMode);
     DEC_A;
-    RET_Z ;
+    RET_Z;
     LD_hl(0x0);
     RET;
 
@@ -5001,8 +5024,8 @@ do_partymon:
 
 }
 
-void HandleStatBoostingHeldItems(void){
-//  The effects handled here are not used in-game.
+void HandleStatBoostingHeldItems(void) {
+    //  The effects handled here are not used in-game.
     LDH_A_addr(hSerialConnectionStatus);
     CP_A(USING_EXTERNAL_CLOCK);
     IF_Z goto player_1;
@@ -5059,7 +5082,7 @@ loop:
     POP_DE;
     LD_A_addr(wFailedMessage);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     XOR_A_A;
     LD_bc_A;
     LD_de_A;
@@ -5075,12 +5098,12 @@ finish:
     POP_DE;
     RET;
 
-// INCLUDE "data/battle/held_stat_up.asm"
+    // INCLUDE "data/battle/held_stat_up.asm"
 
     return GetPartymonItem();
 }
 
-void GetPartymonItem(void){
+void GetPartymonItem(void) {
     LD_HL(wPartyMon1Item);
     LD_A_addr(wCurBattleMon);
     CALL(aGetPartyLocation);
@@ -5089,7 +5112,7 @@ void GetPartymonItem(void){
 
 }
 
-void GetOTPartymonItem(void){
+void GetOTPartymonItem(void) {
     LD_HL(wOTPartyMon1Item);
     LD_A_addr(wCurOTMon);
     CALL(aGetPartyLocation);
@@ -5098,7 +5121,7 @@ void GetOTPartymonItem(void){
 
 }
 
-void UpdateBattleHUDs(void){
+void UpdateBattleHUDs(void) {
     PUSH_HL;
     PUSH_DE;
     PUSH_BC;
@@ -5116,7 +5139,7 @@ void UpdateBattleHUDs(void){
 
 }
 
-void UpdatePlayerHUD(void){
+void UpdatePlayerHUD(void) {
     PUSH_HL;
     PUSH_DE;
     PUSH_BC;
@@ -5130,11 +5153,11 @@ void UpdatePlayerHUD(void){
 
 }
 
-void DrawPlayerHUD(void){
+void DrawPlayerHUD(void) {
     XOR_A_A;
     LDH_addr_A(hBGMapMode);
 
-// Clear the area
+    // Clear the area
     hlcoord(9, 7, wTilemap);
     LD_BC((5 << 8) | 11);
     CALL(aClearBox);
@@ -5145,14 +5168,14 @@ void DrawPlayerHUD(void){
     LD_hl(0x73);  // vertical bar
     CALL(aPrintPlayerHUD);
 
-// HP bar
+    // HP bar
     hlcoord(10, 9, wTilemap);
     LD_B(1);
     XOR_A_A;  // PARTYMON
     LD_addr_A(wMonType);
     PREDEF(pDrawPlayerHP);
 
-// Exp bar
+    // Exp bar
     PUSH_DE;
     LD_A_addr(wCurBattleMon);
     LD_HL(wPartyMon1Exp + 2);
@@ -5169,13 +5192,13 @@ void DrawPlayerHUD(void){
 
 }
 
-void UpdatePlayerHPPal(void){
+void UpdatePlayerHPPal(void) {
     LD_HL(wPlayerHPPal);
     JP(mUpdateHPPal);
 
 }
 
-void CheckDanger(void){
+void CheckDanger(void) {
     LD_HL(wBattleMonHP);
     LD_A_hli;
     OR_A_hl;
@@ -5204,7 +5227,7 @@ done:
 
 }
 
-void PrintPlayerHUD(void){
+void PrintPlayerHUD(void) {
     LD_DE(wBattleMonNickname);
     hlcoord(10, 7, wTilemap);
     CALL(aBattle_DummyFunction);
@@ -5256,7 +5279,7 @@ got_gender_char:
     PREDEF(pPlaceNonFaintStatus);
     POP_HL;
     POP_BC;
-    RET_NZ ;
+    RET_NZ;
     LD_A_B;
     CP_A(0x7f);
     IF_NZ goto copy_level;  // male or female
@@ -5270,7 +5293,7 @@ copy_level:
 
 }
 
-void UpdateEnemyHUD(void){
+void UpdateEnemyHUD(void) {
     PUSH_HL;
     PUSH_DE;
     PUSH_BC;
@@ -5283,7 +5306,7 @@ void UpdateEnemyHUD(void){
 
 }
 
-void DrawEnemyHUD(void){
+void DrawEnemyHUD(void) {
     XOR_A_A;
     LDH_addr_A(hBGMapMode);
 
@@ -5424,30 +5447,30 @@ draw_bar:
 
 }
 
-void UpdateEnemyHPPal(void){
+void UpdateEnemyHPPal(void) {
     LD_HL(wEnemyHPPal);
     CALL(aUpdateHPPal);
     RET;
 
 }
 
-void UpdateHPPal(void){
+void UpdateHPPal(void) {
     LD_B_hl;
     CALL(aSetHPPal);
     LD_A_hl;
     CP_A_B;
-    RET_Z ;
+    RET_Z;
     JP(mFinishBattleAnim);
 
 }
 
-void Battle_DummyFunction(void){
-//  called before placing either battler's nickname in the HUD
+void Battle_DummyFunction(void) {
+    //  called before placing either battler's nickname in the HUD
     RET;
 
 }
 
-void BattleMenu(void){
+void BattleMenu(void) {
     XOR_A_A;
     LDH_addr_A(hBGMapMode);
     CALL(aLoadTempTilemapToTilemap);
@@ -5474,7 +5497,7 @@ loop:
 
 not_contest:
 
-// Auto input: choose "ITEM"
+    // Auto input: choose "ITEM"
     LD_A_addr(wInputType);
     OR_A_A;
     IF_Z goto skip_dude_pack_select;
@@ -5482,7 +5505,7 @@ not_contest:
 
 skip_dude_pack_select:
     CALL(aLoadBattleMenu2);
-    RET_C ;
+    RET_C;
 
 
 next:
@@ -5490,19 +5513,19 @@ next:
     LDH_addr_A(hBGMapMode);
     LD_A_addr(wBattleMenuCursorPosition);
     CP_A(0x1);
-    JP_Z (mBattleMenu_Fight);
+    JP_Z(mBattleMenu_Fight);
     CP_A(0x3);
-    JP_Z (mBattleMenu_Pack);
+    JP_Z(mBattleMenu_Pack);
     CP_A(0x2);
-    JP_Z (mBattleMenu_PKMN);
+    JP_Z(mBattleMenu_PKMN);
     CP_A(0x4);
-    JP_Z (mBattleMenu_Run);
+    JP_Z(mBattleMenu_Run);
     goto loop;
 
     return BattleMenu_Fight();
 }
 
-void BattleMenu_Fight(void){
+void BattleMenu_Fight(void) {
     XOR_A_A;
     LD_addr_A(wNumFleeAttempts);
     CALL(aSafeLoadTempTilemapToTilemap);
@@ -5511,7 +5534,7 @@ void BattleMenu_Fight(void){
 
 }
 
-void LoadBattleMenu2(void){
+void LoadBattleMenu2(void) {
     CALL(aIsMobileBattle);
     IF_Z goto mobile;
 
@@ -5524,7 +5547,7 @@ mobile:
     FARCALL(aMobile_LoadBattleMenu);
     LD_A_addr(wcd2b);
     AND_A_A;
-    RET_Z ;
+    RET_Z;
 
     LD_HL(wcd2a);
     BIT_hl(4);
@@ -5540,14 +5563,14 @@ error:
 
 }
 
-void BattleMenu_Pack(void){
+void BattleMenu_Pack(void) {
     LD_A_addr(wLinkMode);
     AND_A_A;
-    JP_NZ (mBattleMenu_Pack_ItemsCantBeUsed);
+    JP_NZ(mBattleMenu_Pack_ItemsCantBeUsed);
 
     LD_A_addr(wInBattleTowerBattle);
     AND_A_A;
-    JP_NZ (mBattleMenu_Pack_ItemsCantBeUsed);
+    JP_NZ(mBattleMenu_Pack_ItemsCantBeUsed);
 
     CALL(aLoadStandardMenuHeader);
 
@@ -5651,19 +5674,19 @@ run:
 
 }
 
-void BattleMenu_PKMN(void){
+void BattleMenu_PKMN(void) {
     CALL(aLoadStandardMenuHeader);
     return BattleMenuPKMN_ReturnFromStats();
 }
 
-void BattleMenuPKMN_ReturnFromStats(void){
+void BattleMenuPKMN_ReturnFromStats(void) {
     CALL(aExitMenu);
     CALL(aLoadStandardMenuHeader);
     CALL(aClearBGPalettes);
     return BattleMenuPKMN_Loop();
 }
 
-void BattleMenuPKMN_Loop(void){
+void BattleMenuPKMN_Loop(void) {
     CALL(aSetUpBattlePartyMenu_Loop);
     XOR_A_A;
     LD_addr_A(wPartyMenuActionText);
@@ -5678,7 +5701,7 @@ loop:
     CALL(aPlaceHollowCursor);
     LD_A_addr(wMenuCursorY);
     CP_A(0x1);  // SWITCH
-    JP_Z (mTryPlayerSwitch);
+    JP_Z(mTryPlayerSwitch);
     CP_A(0x2);  // STATS
     IF_Z goto Stats;
     CP_A(0x3);  // CANCEL
@@ -5724,7 +5747,7 @@ mobile:
 
 }
 
-void Battle_StatsScreen(void){
+void Battle_StatsScreen(void) {
     CALL(aDisableLCD);
 
     LD_HL(vTiles2 + LEN_2BPP_TILE * 0x31);
@@ -5763,7 +5786,7 @@ void Battle_StatsScreen(void){
 
 }
 
-void TryPlayerSwitch(void){
+void TryPlayerSwitch(void) {
     LD_A_addr(wCurBattleMon);
     LD_D_A;
     LD_A_addr(wCurPartyMon);
@@ -5791,7 +5814,7 @@ trapped:
 
 try_switch:
     CALL(aCheckIfCurPartyMonIsFitToFight);
-    JP_Z (mBattleMenuPKMN_Loop);
+    JP_Z(mBattleMenuPKMN_Loop);
     LD_A_addr(wCurBattleMon);
     LD_addr_A(wLastPlayerMon);
     LD_A(BATTLEPLAYERACTION_SWITCH);
@@ -5808,7 +5831,7 @@ try_switch:
     return PlayerSwitch();
 }
 
-void PlayerSwitch(void){
+void PlayerSwitch(void) {
     LD_A(1);
     LD_addr_A(wPlayerIsSwitching);
     LD_A_addr(wLinkMode);
@@ -5835,11 +5858,11 @@ switchout:
 linked:
     LD_A_addr(wBattleAction);
     CP_A(BATTLEACTION_STRUGGLE);
-    JP_Z (mPlayerSwitch_switch);
+    JP_Z(mPlayerSwitch_switch);
     CP_A(BATTLEACTION_SKIPTURN);
-    JP_Z (mPlayerSwitch_switch);
+    JP_Z(mPlayerSwitch_switch);
     CP_A(BATTLEACTION_SWITCH1);
-    JP_C (mPlayerSwitch_switch);
+    JP_C(mPlayerSwitch_switch);
     CP_A(BATTLEACTION_FORFEIT);
     IF_NZ goto dont_run;
     CALL(aWildFled_EnemyFled_LinkBattleCanceled);
@@ -5864,14 +5887,14 @@ player_1:
 
 }
 
-void EnemyMonEntrance(void){
+void EnemyMonEntrance(void) {
     CALLFAR(aAI_Switch);
     CALL(aSetEnemyTurn);
     JP(mSpikesDamage);
 
 }
 
-void BattleMonEntrance(void){
+void BattleMonEntrance(void) {
     CALL(aWithdrawMonText);
 
     LD_C(50);
@@ -5910,7 +5933,7 @@ ok:
 
 }
 
-void PassedBattleMonEntrance(void){
+void PassedBattleMonEntrance(void) {
     LD_C(50);
     CALL(aDelayFrames);
 
@@ -5933,7 +5956,7 @@ void PassedBattleMonEntrance(void){
 
 }
 
-void BattleMenu_Run(void){
+void BattleMenu_Run(void) {
     CALL(aSafeLoadTempTilemapToTilemap);
     LD_A(0x3);
     LD_addr_A(wMenuCursorY);
@@ -5942,28 +5965,28 @@ void BattleMenu_Run(void){
     CALL(aTryToRunAwayFromBattle);
     LD_A(FALSE);
     LD_addr_A(wFailedToFlee);
-    RET_C ;
+    RET_C;
     LD_A_addr(wBattlePlayerAction);
     AND_A_A;  // BATTLEPLAYERACTION_USEMOVE?
-    RET_NZ ;
+    RET_NZ;
     JP(mBattleMenu);
 
 }
 
-void CheckAmuletCoin(void){
+void CheckAmuletCoin(void) {
     LD_A_addr(wBattleMonItem);
     LD_B_A;
     CALLFAR(aGetItemHeldEffect);
     LD_A_B;
     CP_A(HELD_AMULET_COIN);
-    RET_NZ ;
+    RET_NZ;
     LD_A(1);
     LD_addr_A(wAmuletCoin);
     RET;
 
 }
 
-void MoveSelectionScreen(void){
+void MoveSelectionScreen(void) {
     CALL(aIsMobileBattle);
     IF_NZ goto not_mobile;
     FARCALL(aMobile_MoveSelectionScreen);
@@ -5978,7 +6001,7 @@ not_mobile:
     DEC_A;
     IF_Z goto ether_elixer_menu;
     CALL(aCheckPlayerHasUsableMoves);
-    RET_Z ;  // use Struggle
+    RET_Z;  // use Struggle
     LD_HL(wBattleMonMoves);
     goto got_menu_type;
 
@@ -6101,13 +6124,13 @@ interpret_joypad:
     LDH_addr_A(hBGMapMode);
     CALL(aScrollingMenuJoypad);
     BIT_A(D_UP_F);
-    JP_NZ (mMoveSelectionScreen_pressed_up);
+    JP_NZ(mMoveSelectionScreen_pressed_up);
     BIT_A(D_DOWN_F);
-    JP_NZ (mMoveSelectionScreen_pressed_down);
+    JP_NZ(mMoveSelectionScreen_pressed_down);
     BIT_A(SELECT_F);
-    JP_NZ (mMoveSelectionScreen_pressed_select);
+    JP_NZ(mMoveSelectionScreen_pressed_select);
     BIT_A(B_BUTTON_F);
-// A button
+    // A button
     PUSH_AF;
 
     XOR_A_A;
@@ -6136,7 +6159,7 @@ not_enemy_moves_process_b:
 
 use_move:
     POP_AF;
-    RET_NZ ;
+    RET_NZ;
 
     LD_HL(wBattleMonPP);
     LD_A_addr(wMenuCursorY);
@@ -6191,7 +6214,7 @@ empty_string:
 pressed_up:
     LD_A_addr(wMenuCursorY);
     AND_A_A;
-    JP_NZ (mMoveSelectionScreen_menu_loop);
+    JP_NZ(mMoveSelectionScreen_menu_loop);
     LD_A_addr(wNumMoves);
     INC_A;
     LD_addr_A(wMenuCursorY);
@@ -6205,7 +6228,7 @@ pressed_down:
     INC_A;
     INC_A;
     CP_A_B;
-    JP_NZ (mMoveSelectionScreen_menu_loop);
+    JP_NZ(mMoveSelectionScreen_menu_loop);
     LD_A(0x1);
     LD_addr_A(wMenuCursorY);
     JP(mMoveSelectionScreen_menu_loop);
@@ -6251,7 +6274,7 @@ not_swapping_disabled_move:
 
 
 swap_moves_in_party_struct:
-//  Fixes the COOLTRAINER glitch
+    //  Fixes the COOLTRAINER glitch
     LD_A_addr(wPlayerSubStatus5);
     BIT_A(SUBSTATUS_TRANSFORMED);
     IF_NZ goto transformed;
@@ -6302,7 +6325,7 @@ start_swap:
 
 }
 
-void MoveInfoBox(void){
+void MoveInfoBox(void) {
     XOR_A_A;
     LDH_addr_A(hBGMapMode);
 
@@ -6407,7 +6430,7 @@ ok:
 
 }
 
-void CheckPlayerHasUsableMoves(void){
+void CheckPlayerHasUsableMoves(void) {
     LD_A(STRUGGLE);
     LD_addr_A(wCurPlayerMove);
     LD_A_addr(wPlayerDisableCount);
@@ -6422,7 +6445,7 @@ void CheckPlayerHasUsableMoves(void){
     INC_HL;
     OR_A_hl;
     AND_A(PP_MASK);
-    RET_NZ ;
+    RET_NZ;
     goto force_struggle;
 
 
@@ -6445,9 +6468,9 @@ loop:
 
 
 done:
-// Bug: this will result in a move with PP Up confusing the game.
+    // Bug: this will result in a move with PP Up confusing the game.
     AND_A_A;  // should be "and PP_MASK"
-    RET_NZ ;
+    RET_NZ;
 
 
 force_struggle:
@@ -6460,10 +6483,10 @@ force_struggle:
 
 }
 
-void ParseEnemyAction(void){
+void ParseEnemyAction(void) {
     LD_A_addr(wEnemyIsSwitching);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     LD_A_addr(wLinkMode);
     AND_A_A;
     IF_Z goto not_linked;
@@ -6471,28 +6494,28 @@ void ParseEnemyAction(void){
     CALL(aLoadTilemapToTempTilemap);
     LD_A_addr(wBattlePlayerAction);
     AND_A_A;  // BATTLEPLAYERACTION_USEMOVE?
-    CALL_Z (aLinkBattleSendReceiveAction);
+    CALL_Z(aLinkBattleSendReceiveAction);
     CALL(aSafeLoadTempTilemapToTilemap);
     LD_A_addr(wBattleAction);
     CP_A(BATTLEACTION_STRUGGLE);
-    JP_Z (mParseEnemyAction_struggle);
+    JP_Z(mParseEnemyAction_struggle);
     CP_A(BATTLEACTION_SKIPTURN);
-    JP_Z (mParseEnemyAction_skip_turn);
+    JP_Z(mParseEnemyAction_skip_turn);
     CP_A(BATTLEACTION_SWITCH1);
-    JP_NC (mResetVarsForSubstatusRage);
+    JP_NC(mResetVarsForSubstatusRage);
     LD_addr_A(wCurEnemyMoveNum);
     LD_C_A;
     LD_A_addr(wEnemySubStatus1);
     BIT_A(SUBSTATUS_ROLLOUT);
-    JP_NZ (mParseEnemyAction_skip_load);
+    JP_NZ(mParseEnemyAction_skip_load);
     LD_A_addr(wEnemySubStatus3);
     AND_A(1 << SUBSTATUS_CHARGED | 1 << SUBSTATUS_RAMPAGE | 1 << SUBSTATUS_BIDE);
-    JP_NZ (mParseEnemyAction_skip_load);
+    JP_NZ(mParseEnemyAction_skip_load);
 
     LD_HL(wEnemySubStatus5);
     BIT_hl(SUBSTATUS_ENCORED);
     LD_A_addr(wLastEnemyMove);
-    JP_NZ (mParseEnemyAction_finish);
+    JP_NZ(mParseEnemyAction_finish);
     LD_HL(wEnemyMonMoves);
     LD_B(0);
     ADD_HL_BC;
@@ -6510,7 +6533,7 @@ not_linked:
 
 skip_encore:
     CALL(aCheckEnemyLockedIn);
-    JP_NZ (mResetVarsForSubstatusRage);
+    JP_NZ(mResetVarsForSubstatusRage);
     goto continue_turn;
 
 
@@ -6527,7 +6550,7 @@ continue_turn:
 loop:
     LD_A_hl;
     AND_A_A;
-    JP_Z (mParseEnemyAction_struggle);
+    JP_Z(mParseEnemyAction_struggle);
     LD_A_addr(wEnemyDisabledMove);
     CP_A_hl;
     IF_Z goto disabled;
@@ -6548,7 +6571,7 @@ enough_pp:
     LD_A_addr(wBattleMode);
     DEC_A;
     IF_NZ goto skip_load;
-//  wild
+    //  wild
 
 loop2:
     LD_HL(wEnemyMonMoves);
@@ -6611,9 +6634,9 @@ fury_cutter:
 no_rage:
     LD_A_addr(wEnemyMoveStruct + MOVE_EFFECT);
     CP_A(EFFECT_PROTECT);
-    RET_Z ;
+    RET_Z;
     CP_A(EFFECT_ENDURE);
-    RET_Z ;
+    RET_Z;
     XOR_A_A;
     LD_addr_A(wEnemyProtectCount);
     RET;
@@ -6626,7 +6649,7 @@ struggle:
     return ResetVarsForSubstatusRage();
 }
 
-void ResetVarsForSubstatusRage(void){
+void ResetVarsForSubstatusRage(void) {
     XOR_A_A;
     LD_addr_A(wEnemyFuryCutterCount);
     LD_addr_A(wEnemyProtectCount);
@@ -6637,15 +6660,15 @@ void ResetVarsForSubstatusRage(void){
 
 }
 
-void CheckEnemyLockedIn(void){
+void CheckEnemyLockedIn(void) {
     LD_A_addr(wEnemySubStatus4);
     AND_A(1 << SUBSTATUS_RECHARGE);
-    RET_NZ ;
+    RET_NZ;
 
     LD_HL(wEnemySubStatus3);
     LD_A_hl;
     AND_A(1 << SUBSTATUS_CHARGED | 1 << SUBSTATUS_RAMPAGE | 1 << SUBSTATUS_BIDE);
-    RET_NZ ;
+    RET_NZ;
 
     LD_HL(wEnemySubStatus1);
     BIT_hl(SUBSTATUS_ROLLOUT);
@@ -6653,52 +6676,52 @@ void CheckEnemyLockedIn(void){
 
 }
 
-void LinkBattleSendReceiveAction(void){
+void LinkBattleSendReceiveAction(void) {
     FARCALL(av_LinkBattleSendReceiveAction);
     RET;
 
 }
 
-void LoadEnemyMon(void){
-//  Initialize enemy monster parameters
-//  To do this we pull the species from wTempEnemyMonSpecies
+void LoadEnemyMon(void) {
+    //  Initialize enemy monster parameters
+    //  To do this we pull the species from wTempEnemyMonSpecies
 
-//  Notes:
-//    BattleRandom is used to ensure sync between Game Boys
+    //  Notes:
+    //    BattleRandom is used to ensure sync between Game Boys
 
-//  Clear the whole enemy mon struct (wEnemyMon)
+    //  Clear the whole enemy mon struct (wEnemyMon)
     XOR_A_A;
     LD_HL(wEnemyMonSpecies);
     LD_BC(wEnemyMonEnd - wEnemyMon);
     CALL(aByteFill);
 
-//  We don't need to be here if we're in a link battle
+    //  We don't need to be here if we're in a link battle
     LD_A_addr(wLinkMode);
     AND_A_A;
-    JP_NZ (mInitEnemyMon);
+    JP_NZ(mInitEnemyMon);
 
-//  and also not in a BattleTower-Battle
+    //  and also not in a BattleTower-Battle
     LD_A_addr(wInBattleTowerBattle);
     BIT_A(0);
-    JP_NZ (mInitEnemyMon);
+    JP_NZ(mInitEnemyMon);
 
-//  Make sure everything knows what species we're working with
+    //  Make sure everything knows what species we're working with
     LD_A_addr(wTempEnemyMonSpecies);
     LD_addr_A(wEnemyMonSpecies);
     LD_addr_A(wCurSpecies);
     LD_addr_A(wCurPartySpecies);
 
-//  Grab the BaseData for this species
+    //  Grab the BaseData for this species
     CALL(aGetBaseData);
 
-//  Let's get the item:
+    //  Let's get the item:
 
-//  Is the item predetermined?
+    //  Is the item predetermined?
     LD_A_addr(wBattleMode);
     DEC_A;
     IF_Z goto WildItem;
 
-//  If we're in a trainer battle, the item is in the party struct
+    //  If we're in a trainer battle, the item is in the party struct
     LD_A_addr(wCurPartyMon);
     LD_HL(wOTPartyMon1Item);
     CALL(aGetPartyLocation);  // bc = PartyMon[wCurPartyMon] - wPartyMons
@@ -6707,28 +6730,28 @@ void LoadEnemyMon(void){
 
 
 WildItem:
-//  In a wild battle, we pull from the item slots in BaseData
+    //  In a wild battle, we pull from the item slots in BaseData
 
-//  Force Item1
-//  Used for Ho-Oh, Lugia and Snorlax encounters
+    //  Force Item1
+    //  Used for Ho-Oh, Lugia and Snorlax encounters
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_FORCEITEM);
     LD_A_addr(wBaseItem1);
     IF_Z goto UpdateItem;
 
-//  Failing that, it's all up to chance
-//   Effective chances:
-//     75% None
-//     23% Item1
-//      2% Item2
+    //  Failing that, it's all up to chance
+    //   Effective chances:
+    //     75% None
+    //     23% Item1
+    //      2% Item2
 
-//  25% chance of getting an item
+    //  25% chance of getting an item
     CALL(aBattleRandom);
     CP_A(75 percent + 1);
     LD_A(NO_ITEM);
     IF_C goto UpdateItem;
 
-//  From there, an 8% chance for Item2
+    //  From there, an 8% chance for Item2
     CALL(aBattleRandom);
     CP_A(8 percent);  // 8% of 25% = 2% Item2
     LD_A_addr(wBaseItem1);
@@ -6739,9 +6762,9 @@ WildItem:
 UpdateItem:
     LD_addr_A(wEnemyMonItem);
 
-//  Initialize DVs
+    //  Initialize DVs
 
-//  If we're in a trainer battle, DVs are predetermined
+    //  If we're in a trainer battle, DVs are predetermined
     LD_A_addr(wBattleMode);
     AND_A_A;
     IF_Z goto InitDVs;
@@ -6750,7 +6773,7 @@ UpdateItem:
     BIT_A(SUBSTATUS_TRANSFORMED);
     IF_Z goto InitDVs;
 
-//  Unknown
+    //  Unknown
     LD_HL(wEnemyBackupDVs);
     LD_DE(wEnemyMonDVs);
     LD_A_hli;
@@ -6762,47 +6785,47 @@ UpdateItem:
 
 
 InitDVs:
-//  Trainer DVs
+    //  Trainer DVs
 
-//  All trainers have preset DVs, determined by class
-//  See GetTrainerDVs for more on that
+    //  All trainers have preset DVs, determined by class
+    //  See GetTrainerDVs for more on that
     FARCALL(aGetTrainerDVs);
-//  These are the DVs we'll use if we're actually in a trainer battle
+    //  These are the DVs we'll use if we're actually in a trainer battle
     LD_A_addr(wBattleMode);
     DEC_A;
     IF_NZ goto UpdateDVs;
 
-//  Wild DVs
-//  Here's where the fun starts
+    //  Wild DVs
+    //  Here's where the fun starts
 
-//  Roaming monsters (Entei, Raikou) work differently
-//  They have their own structs, which are shorter than normal
+    //  Roaming monsters (Entei, Raikou) work differently
+    //  They have their own structs, which are shorter than normal
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_ROAMING);
     IF_NZ goto NotRoaming;
 
-//  Grab HP
+    //  Grab HP
     CALL(aGetRoamMonHP);
     LD_A_hl;
-//  Check if the HP has been initialized
+    //  Check if the HP has been initialized
     AND_A_A;
-//  We'll do something with the result in a minute
+    //  We'll do something with the result in a minute
     PUSH_AF;
 
-//  Grab DVs
+    //  Grab DVs
     CALL(aGetRoamMonDVs);
     INC_HL;
     LD_A_hld;
     LD_C_A;
     LD_B_hl;
 
-//  Get back the result of our check
+    //  Get back the result of our check
     POP_AF;
-//  If the RoamMon struct has already been initialized, we're done
+    //  If the RoamMon struct has already been initialized, we're done
     IF_NZ goto UpdateDVs;
 
-//  If it hasn't, we need to initialize the DVs
-//  (HP is initialized at the end of the battle)
+    //  If it hasn't, we need to initialize the DVs
+    //  (HP is initialized at the end of the battle)
     CALL(aGetRoamMonDVs);
     INC_HL;
     CALL(aBattleRandom);
@@ -6811,15 +6834,15 @@ InitDVs:
     CALL(aBattleRandom);
     LD_hl_A;
     LD_B_A;
-//  We're done with DVs
+    //  We're done with DVs
     goto UpdateDVs;
 
 
 NotRoaming:
-//  Register a contains wBattleType
+    //  Register a contains wBattleType
 
-//  Forced shiny battle type
-//  Used by Red Gyarados at Lake of Rage
+    //  Forced shiny battle type
+    //  Used by Red Gyarados at Lake of Rage
     CP_A(BATTLETYPE_SHINY);
     IF_NZ goto GenerateDVs;
 
@@ -6829,7 +6852,7 @@ NotRoaming:
 
 
 GenerateDVs:
-//  Generate new random DVs
+    //  Generate new random DVs
     CALL(aBattleRandom);
     LD_B_A;
     CALL(aBattleRandom);
@@ -6837,141 +6860,141 @@ GenerateDVs:
 
 
 UpdateDVs:
-//  Input DVs in register bc
+    //  Input DVs in register bc
     LD_HL(wEnemyMonDVs);
     LD_A_B;
     LD_hli_A;
     LD_hl_C;
 
-//  We've still got more to do if we're dealing with a wild monster
+    //  We've still got more to do if we're dealing with a wild monster
     LD_A_addr(wBattleMode);
     DEC_A;
     IF_NZ goto Happiness;
 
-//  Species-specfic:
+    //  Species-specfic:
 
-//  Unown
+    //  Unown
     LD_A_addr(wTempEnemyMonSpecies);
     CP_A(UNOWN);
     IF_NZ goto Magikarp;
 
-//  Get letter based on DVs
+    //  Get letter based on DVs
     LD_HL(wEnemyMonDVs);
     PREDEF(pGetUnownLetter);
-//  Can't use any letters that haven't been unlocked
-//  If combined with forced shiny battletype, causes an infinite loop
+    //  Can't use any letters that haven't been unlocked
+    //  If combined with forced shiny battletype, causes an infinite loop
     CALL(aCheckUnownLetter);
     IF_C goto GenerateDVs;  // try again
 
 
 Magikarp:
-//  These filters are untranslated.
-//  They expect at wMagikarpLength a 2-byte value in mm,
-//  but the value is in feet and inches (one byte each).
+    //  These filters are untranslated.
+    //  They expect at wMagikarpLength a 2-byte value in mm,
+    //  but the value is in feet and inches (one byte each).
 
-//  The first filter is supposed to make very large Magikarp even rarer,
-//  by targeting those 1600 mm (= 5'3") or larger.
-//  After the conversion to feet, it is unable to target any,
-//  since the largest possible Magikarp is 5'3", and $0503 = 1283 mm.
+    //  The first filter is supposed to make very large Magikarp even rarer,
+    //  by targeting those 1600 mm (= 5'3") or larger.
+    //  After the conversion to feet, it is unable to target any,
+    //  since the largest possible Magikarp is 5'3", and $0503 = 1283 mm.
     LD_A_addr(wTempEnemyMonSpecies);
     CP_A(MAGIKARP);
     IF_NZ goto Happiness;
 
-//  Get Magikarp's length
+    //  Get Magikarp's length
     LD_DE(wEnemyMonDVs);
     LD_BC(wPlayerID);
     CALLFAR(aCalcMagikarpLength);
 
-//  No reason to keep going if length > 1536 mm (i.e. if HIGH(length) > 6 feet)
+    //  No reason to keep going if length > 1536 mm (i.e. if HIGH(length) > 6 feet)
     LD_A_addr(wMagikarpLength);
     CP_A(HIGH(1536));  // should be "cp 5", since 1536 mm = 5'0", but HIGH(1536) = 6
     IF_NZ goto CheckMagikarpArea;
 
-//  5% chance of skipping both size checks
+    //  5% chance of skipping both size checks
     CALL(aRandom);
     CP_A(5 percent);
     IF_C goto CheckMagikarpArea;
-//  Try again if length >= 1616 mm (i.e. if LOW(length) >= 4 inches)
+    //  Try again if length >= 1616 mm (i.e. if LOW(length) >= 4 inches)
     LD_A_addr(wMagikarpLength + 1);
     CP_A(LOW(1616));  // should be "cp 4", since 1616 mm = 5'4", but LOW(1616) = 80
     IF_NC goto GenerateDVs;
 
-//  20% chance of skipping this check
+    //  20% chance of skipping this check
     CALL(aRandom);
     CP_A(20 percent - 1);
     IF_C goto CheckMagikarpArea;
-//  Try again if length >= 1600 mm (i.e. if LOW(length) >= 3 inches)
+    //  Try again if length >= 1600 mm (i.e. if LOW(length) >= 3 inches)
     LD_A_addr(wMagikarpLength + 1);
     CP_A(LOW(1600));  // should be "cp 3", since 1600 mm = 5'3", but LOW(1600) = 64
     IF_NC goto GenerateDVs;
 
 
 CheckMagikarpArea:
-//  The "jr z" checks are supposed to be "jr nz".
+    //  The "jr z" checks are supposed to be "jr nz".
 
-//  Instead, all maps in GROUP_LAKE_OF_RAGE (Mahogany area)
-//  and Routes 20 and 44 are treated as Lake of Rage.
+    //  Instead, all maps in GROUP_LAKE_OF_RAGE (Mahogany area)
+    //  and Routes 20 and 44 are treated as Lake of Rage.
 
-//  This also means Lake of Rage Magikarp can be smaller than ones
-//  caught elsewhere rather than the other way around.
+    //  This also means Lake of Rage Magikarp can be smaller than ones
+    //  caught elsewhere rather than the other way around.
 
-//  Intended behavior enforces a minimum size at Lake of Rage.
-//  The real behavior prevents a minimum size in the Lake of Rage area.
+    //  Intended behavior enforces a minimum size at Lake of Rage.
+    //  The real behavior prevents a minimum size in the Lake of Rage area.
 
-//  Moreover, due to the check not being translated to feet+inches, all Magikarp
-//  smaller than 4'0" may be caught by the filter, a lot more than intended.
+    //  Moreover, due to the check not being translated to feet+inches, all Magikarp
+    //  smaller than 4'0" may be caught by the filter, a lot more than intended.
     LD_A_addr(wMapGroup);
     CP_A(GROUP_LAKE_OF_RAGE);
     IF_Z goto Happiness;
     LD_A_addr(wMapNumber);
     CP_A(MAP_LAKE_OF_RAGE);
     IF_Z goto Happiness;
-//  40% chance of not flooring
+    //  40% chance of not flooring
     CALL(aRandom);
     CP_A(39 percent + 1);
     IF_C goto Happiness;
-//  Try again if length < 1024 mm (i.e. if HIGH(length) < 3 feet)
+    //  Try again if length < 1024 mm (i.e. if HIGH(length) < 3 feet)
     LD_A_addr(wMagikarpLength);
     CP_A(HIGH(1024));  // should be "cp 3", since 1024 mm = 3'4", but HIGH(1024) = 4
     IF_C goto GenerateDVs;  // try again
 
-//  Finally done with DVs
+    //  Finally done with DVs
 
 
 Happiness:
-//  Set happiness
+    //  Set happiness
     LD_A(BASE_HAPPINESS);
     LD_addr_A(wEnemyMonHappiness);
-//  Set level
+    //  Set level
     LD_A_addr(wCurPartyLevel);
     LD_addr_A(wEnemyMonLevel);
-//  Fill stats
+    //  Fill stats
     LD_DE(wEnemyMonMaxHP);
     LD_B(FALSE);
     LD_HL(wEnemyMonDVs - (MON_DVS - MON_STAT_EXP + 1));
     PREDEF(pCalcMonStats);
 
-//  If we're in a trainer battle,
-//  get the rest of the parameters from the party struct
+    //  If we're in a trainer battle,
+    //  get the rest of the parameters from the party struct
     LD_A_addr(wBattleMode);
     CP_A(TRAINER_BATTLE);
     IF_Z goto OpponentParty;
 
-//  If we're in a wild battle, check wild-specific stuff
+    //  If we're in a wild battle, check wild-specific stuff
     AND_A_A;
     IF_Z goto TreeMon;
 
     LD_A_addr(wEnemySubStatus5);
     BIT_A(SUBSTATUS_TRANSFORMED);
-    JP_NZ (mLoadEnemyMon_Moves);
+    JP_NZ(mLoadEnemyMon_Moves);
 
 
 TreeMon:
-//  If we're headbutting trees, some monsters enter battle asleep
+    //  If we're headbutting trees, some monsters enter battle asleep
     CALL(aCheckSleepingTreeMon);
     LD_A(TREEMON_SLEEP_TURNS);
     IF_C goto UpdateStatus;
-//  Otherwise, no status
+    //  Otherwise, no status
     XOR_A_A;
 
 
@@ -6979,43 +7002,43 @@ UpdateStatus:
     LD_HL(wEnemyMonStatus);
     LD_hli_A;
 
-//  Unused byte
+    //  Unused byte
     XOR_A_A;
     LD_hli_A;
 
-//  Full HP..
+    //  Full HP..
     LD_A_addr(wEnemyMonMaxHP);
     LD_hli_A;
     LD_A_addr(wEnemyMonMaxHP + 1);
     LD_hl_A;
 
-//  ..unless it's a RoamMon
+    //  ..unless it's a RoamMon
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_ROAMING);
     IF_NZ goto Moves;
 
-//  Grab HP
+    //  Grab HP
     CALL(aGetRoamMonHP);
     LD_A_hl;
-//  Check if it's been initialized again
+    //  Check if it's been initialized again
     AND_A_A;
     IF_Z goto InitRoamHP;
-//  Update from the struct if it has
+    //  Update from the struct if it has
     LD_A_hl;
     LD_addr_A(wEnemyMonHP + 1);
     goto Moves;
 
 
 InitRoamHP:
-//  HP only uses the lo byte in the RoamMon struct since
-//  Raikou and Entei will have < 256 hp at level 40
+    //  HP only uses the lo byte in the RoamMon struct since
+    //  Raikou and Entei will have < 256 hp at level 40
     LD_A_addr(wEnemyMonHP + 1);
     LD_hl_A;
     goto Moves;
 
 
 OpponentParty:
-//  Get HP from the party struct
+    //  Get HP from the party struct
     LD_HL((wOTPartyMon1HP + 1));
     LD_A_addr(wCurPartyMon);
     CALL(aGetPartyLocation);
@@ -7024,11 +7047,11 @@ OpponentParty:
     LD_A_hld;
     LD_addr_A(wEnemyMonHP);
 
-//  Make sure everything knows which monster the opponent is using
+    //  Make sure everything knows which monster the opponent is using
     LD_A_addr(wCurPartyMon);
     LD_addr_A(wCurOTMon);
 
-//  Get status from the party struct
+    //  Get status from the party struct
     DEC_HL;
     LD_A_hl;  // OTPartyMonStatus
     LD_addr_A(wEnemyMonStatus);
@@ -7043,13 +7066,13 @@ Moves:
     LD_A_hl;
     LD_de_A;
 
-//  Get moves
+    //  Get moves
     LD_DE(wEnemyMonMoves);
-//  Are we in a trainer battle?
+    //  Are we in a trainer battle?
     LD_A_addr(wBattleMode);
     CP_A(TRAINER_BATTLE);
     IF_NZ goto WildMoves;
-//  Then copy moves from the party struct
+    //  Then copy moves from the party struct
     LD_HL(wOTPartyMon1Moves);
     LD_A_addr(wCurPartyMon);
     CALL(aGetPartyLocation);
@@ -7059,7 +7082,7 @@ Moves:
 
 
 WildMoves:
-//  Clear wEnemyMonMoves
+    //  Clear wEnemyMonMoves
     XOR_A_A;
     LD_H_D;
     LD_L_E;
@@ -7068,17 +7091,17 @@ WildMoves:
     LD_hli_A;
     LD_hl_A;
     LD_addr_A(wSkipMovesBeforeLevelUp);
-//  Fill moves based on level
+    //  Fill moves based on level
     PREDEF(pFillMoves);
 
 
 PP:
-//  Trainer battle?
+    //  Trainer battle?
     LD_A_addr(wBattleMode);
     CP_A(TRAINER_BATTLE);
     IF_Z goto TrainerPP;
 
-//  Fill wild PP
+    //  Fill wild PP
     LD_HL(wEnemyMonMoves);
     LD_DE(wEnemyMonPP);
     PREDEF(pFillPP);
@@ -7086,7 +7109,7 @@ PP:
 
 
 TrainerPP:
-//  Copy PP from the party struct
+    //  Copy PP from the party struct
     LD_HL(wOTPartyMon1PP);
     LD_A_addr(wCurPartyMon);
     CALL(aGetPartyLocation);
@@ -7096,8 +7119,8 @@ TrainerPP:
 
 
 Finish:
-//  Copy the first five base stats (the enemy mon's base Sp. Atk
-//  is also used to calculate Sp. Def stat experience)
+    //  Copy the first five base stats (the enemy mon's base Sp. Atk
+    //  is also used to calculate Sp. Def stat experience)
     LD_HL(wBaseStats);
     LD_DE(wEnemyMonBaseStats);
     LD_B(NUM_STATS - 1);
@@ -7121,18 +7144,18 @@ loop:
 
     CALL(aGetPokemonName);
 
-//  Did we catch it?
+    //  Did we catch it?
     LD_A_addr(wBattleMode);
     AND_A_A;
-    RET_Z ;
+    RET_Z;
 
-//  Update enemy nickname
+    //  Update enemy nickname
     LD_HL(wStringBuffer1);
     LD_DE(wEnemyMonNickname);
     LD_BC(MON_NAME_LENGTH);
     CALL(aCopyBytes);
 
-//  Saw this mon
+    //  Saw this mon
     LD_A_addr(wTempEnemyMonSpecies);
     DEC_A;
     LD_C_A;
@@ -7149,16 +7172,16 @@ loop:
 
 }
 
-void CheckSleepingTreeMon(void){
-//  Return carry if species is in the list
-//  for the current time of day
+void CheckSleepingTreeMon(void) {
+    //  Return carry if species is in the list
+    //  for the current time of day
 
-//  Don't do anything if this isn't a tree encounter
+    //  Don't do anything if this isn't a tree encounter
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_TREE);
     IF_NZ goto NotSleeping;
 
-//  Get list for the time of day
+    //  Get list for the time of day
     LD_HL(mAsleepTreeMonsMorn);
     LD_A_addr(wTimeOfDay);
     CP_A(DAY_F);
@@ -7172,21 +7195,21 @@ Check:
     LD_A_addr(wTempEnemyMonSpecies);
     LD_DE(1);  // length of species id
     CALL(aIsInArray);
-//  If it's a match, the opponent is asleep
-    RET_C ;
+    //  If it's a match, the opponent is asleep
+    RET_C;
 
 
 NotSleeping:
     AND_A_A;
     RET;
 
-// INCLUDE "data/wild/treemons_asleep.asm"
+    // INCLUDE "data/wild/treemons_asleep.asm"
 
     return CheckUnownLetter();
 }
 
-void CheckUnownLetter(void){
-//  Return carry if the Unown letter hasn't been unlocked yet
+void CheckUnownLetter(void) {
+    //  Return carry if the Unown letter hasn't been unlocked yet
 
     LD_A_addr(wUnlockedUnowns);
     LD_C_A;
@@ -7195,11 +7218,11 @@ void CheckUnownLetter(void){
 
 loop:
 
-//  Don't check this set unless it's been unlocked
+    //  Don't check this set unless it's been unlocked
     SRL_C;
     IF_NC goto next;
 
-//  Is our letter in the set?
+    //  Is our letter in the set?
     LD_HL(mUnlockedUnownLetterSets);
     ADD_HL_DE;
     LD_A_hli;
@@ -7218,30 +7241,30 @@ loop:
 
 
 next:
-//  Make sure we haven't gone past the end of the table
+    //  Make sure we haven't gone past the end of the table
     INC_E;
     INC_E;
     LD_A_E;
     //CP_A(UnlockedUnownLetterSets.End - UnlockedUnownLetterSets);
     IF_C goto loop;
 
-//  Hasn't been unlocked, or the letter is invalid
+    //  Hasn't been unlocked, or the letter is invalid
     SCF;
     RET;
 
 
 match:
-//  Valid letter
+    //  Valid letter
     AND_A_A;
     RET;
 
-// INCLUDE "data/wild/unlocked_unowns.asm"
+    // INCLUDE "data/wild/unlocked_unowns.asm"
 
     return SwapBattlerLevels();
 }
 
-void SwapBattlerLevels(void){
-//  //  unreferenced
+void SwapBattlerLevels(void) {
+    //  //  unreferenced
     PUSH_BC;
     LD_A_addr(wBattleMonLevel);
     LD_B_A;
@@ -7254,7 +7277,7 @@ void SwapBattlerLevels(void){
 
 }
 
-void BattleWinSlideInEnemyTrainerFrontpic(void){
+void BattleWinSlideInEnemyTrainerFrontpic(void) {
     XOR_A_A;
     LD_addr_A(wTempEnemyMonSpecies);
     CALL(aFinishBattleAnim);
@@ -7270,7 +7293,7 @@ outer_loop:
     INC_C;
     LD_A_C;
     CP_A(7);
-    RET_Z ;
+    RET_Z;
     XOR_A_A;
     LDH_addr_A(hBGMapMode);
     LDH_addr_A(hBGMapThird);
@@ -7320,32 +7343,32 @@ loop:
 
 }
 
-void ApplyStatusEffectOnPlayerStats(void){
+void ApplyStatusEffectOnPlayerStats(void) {
     LD_A(1);
     JR(mApplyStatusEffectOnStats);
 
 }
 
-void ApplyStatusEffectOnEnemyStats(void){
+void ApplyStatusEffectOnEnemyStats(void) {
     XOR_A_A;
 
     return ApplyStatusEffectOnStats();
 }
 
-void ApplyStatusEffectOnStats(void){
+void ApplyStatusEffectOnStats(void) {
     LDH_addr_A(hBattleTurn);
     CALL(aApplyPrzEffectOnSpeed);
     JP(mApplyBrnEffectOnAttack);
 
 }
 
-void ApplyPrzEffectOnSpeed(void){
+void ApplyPrzEffectOnSpeed(void) {
     LDH_A_addr(hBattleTurn);
     AND_A_A;
     IF_Z goto enemy;
     LD_A_addr(wBattleMonStatus);
     AND_A(1 << PAR);
-    RET_Z ;
+    RET_Z;
     LD_HL(wBattleMonSpeed + 1);
     LD_A_hld;
     LD_B_A;
@@ -7368,7 +7391,7 @@ player_ok:
 enemy:
     LD_A_addr(wEnemyMonStatus);
     AND_A(1 << PAR);
-    RET_Z ;
+    RET_Z;
     LD_HL(wEnemyMonSpeed + 1);
     LD_A_hld;
     LD_B_A;
@@ -7389,13 +7412,13 @@ enemy_ok:
 
 }
 
-void ApplyBrnEffectOnAttack(void){
+void ApplyBrnEffectOnAttack(void) {
     LDH_A_addr(hBattleTurn);
     AND_A_A;
     IF_Z goto enemy;
     LD_A_addr(wBattleMonStatus);
     AND_A(1 << BRN);
-    RET_Z ;
+    RET_Z;
     LD_HL(wBattleMonAttack + 1);
     LD_A_hld;
     LD_B_A;
@@ -7416,7 +7439,7 @@ player_ok:
 enemy:
     LD_A_addr(wEnemyMonStatus);
     AND_A(1 << BRN);
-    RET_Z ;
+    RET_Z;
     LD_HL(wEnemyMonAttack + 1);
     LD_A_hld;
     LD_B_A;
@@ -7435,8 +7458,8 @@ enemy_ok:
 
 }
 
-void ApplyStatLevelMultiplierOnAllStats(void){
-//  Apply StatLevelMultipliers on all 5 Stats
+void ApplyStatLevelMultiplierOnAllStats(void) {
+    //  Apply StatLevelMultipliers on all 5 Stats
     LD_C(0);
 
 stat_loop:
@@ -7449,7 +7472,7 @@ stat_loop:
 
 }
 
-void ApplyStatLevelMultiplier(void){
+void ApplyStatLevelMultiplier(void) {
     PUSH_BC;
     PUSH_BC;
     LD_A_addr(wApplyStatLevelMultipliersToEnemy);
@@ -7509,12 +7532,12 @@ okay2:
     CALL(aDivide);
     POP_HL;
 
-//  Cap at 999.
+    //  Cap at 999.
     LDH_A_addr(hQuotient + 3);
     SUB_A(LOW(MAX_STAT_VALUE));
     LDH_A_addr(hQuotient + 2);
     SBC_A(HIGH(MAX_STAT_VALUE));
-    JP_C (mApplyStatLevelMultiplier_okay3);
+    JP_C(mApplyStatLevelMultiplier_okay3);
 
     LD_A(HIGH(MAX_STAT_VALUE));
     LDH_addr_A(hQuotient + 2);
@@ -7537,36 +7560,36 @@ okay4:
     POP_BC;
     RET;
 
-// INCLUDE "data/battle/stat_multipliers_2.asm"
+    // INCLUDE "data/battle/stat_multipliers_2.asm"
 
     return BadgeStatBoosts();
 }
 
-void BadgeStatBoosts(void){
-//  Raise the stats of the battle mon in wBattleMon
-//  depending on which badges have been obtained.
+void BadgeStatBoosts(void) {
+    //  Raise the stats of the battle mon in wBattleMon
+    //  depending on which badges have been obtained.
 
-//  Every other badge boosts a stat, starting from the first.
-//  GlacierBadge also boosts Special Defense, although the relevant code is buggy (see below).
+    //  Every other badge boosts a stat, starting from the first.
+    //  GlacierBadge also boosts Special Defense, although the relevant code is buggy (see below).
 
-//      ZephyrBadge:  Attack
-//      PlainBadge:   Speed
-//      MineralBadge: Defense
-//      GlacierBadge: Special Attack and Special Defense
+    //      ZephyrBadge:  Attack
+    //      PlainBadge:   Speed
+    //      MineralBadge: Defense
+    //      GlacierBadge: Special Attack and Special Defense
 
-//  The boosted stats are in order, except PlainBadge and MineralBadge's boosts are swapped.
+    //  The boosted stats are in order, except PlainBadge and MineralBadge's boosts are swapped.
 
     LD_A_addr(wLinkMode);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
 
     LD_A_addr(wInBattleTowerBattle);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
 
     LD_A_addr(wJohtoBadges);
 
-//  Swap badges 3 (PlainBadge) and 5 (MineralBadge).
+    //  Swap badges 3 (PlainBadge) and 5 (MineralBadge).
     LD_D_A;
     AND_A((1 << PLAINBADGE));
     ADD_A_A;
@@ -7589,24 +7612,24 @@ void BadgeStatBoosts(void){
 CheckBadge:
     LD_A_B;
     SRL_B;
-    CALL_C (aBoostStat);
+    CALL_C(aBoostStat);
     INC_HL;
     INC_HL;
-//  Check every other badge.
+    //  Check every other badge.
     SRL_B;
     DEC_C;
     IF_NZ goto CheckBadge;
-//  Check GlacierBadge again for Special Defense.
-//  This check is buggy because it assumes that a is set by the "ld a, b" in the above loop,
-//  but it can actually be overwritten by the call to BoostStat.
+    //  Check GlacierBadge again for Special Defense.
+    //  This check is buggy because it assumes that a is set by the "ld a, b" in the above loop,
+    //  but it can actually be overwritten by the call to BoostStat.
     SRL_A;
-    CALL_C (aBoostStat);
+    CALL_C(aBoostStat);
     RET;
 
 }
 
-void BoostStat(void){
-//  Raise stat at hl by 1/8.
+void BoostStat(void) {
+    //  Raise stat at hl by 1/8.
 
     LD_A_hli;
     LD_D_A;
@@ -7624,12 +7647,12 @@ void BoostStat(void){
     ADC_A_D;
     LD_hli_A;
 
-//  Cap at 999.
+    //  Cap at 999.
     LD_A_hld;
     SUB_A(LOW(MAX_STAT_VALUE));
     LD_A_hl;
     SBC_A(HIGH(MAX_STAT_VALUE));
-    RET_C ;
+    RET_C;
     LD_A(HIGH(MAX_STAT_VALUE));
     LD_hli_A;
     LD_A(LOW(MAX_STAT_VALUE));
@@ -7638,20 +7661,20 @@ void BoostStat(void){
 
 }
 
-void v_LoadBattleFontsHPBar(void){
+void v_LoadBattleFontsHPBar(void) {
     CALLFAR(aLoadBattleFontsHPBar);
     RET;
 
 }
 
-void v_LoadHPBar(void){
+void v_LoadHPBar(void) {
     CALLFAR(aLoadHPBar);
     RET;
 
 }
 
-void LoadHPExpBarGFX(void){
-//  //  unreferenced
+void LoadHPExpBarGFX(void) {
+    //  //  unreferenced
     LD_DE(mEnemyHPBarBorderGFX);
     LD_HL(vTiles2 + LEN_2BPP_TILE * 0x6c);
     LD_BC((BANK(aEnemyHPBarBorderGFX) << 8) | 4);
@@ -7667,7 +7690,7 @@ void LoadHPExpBarGFX(void){
 
 }
 
-void EmptyBattleTextbox(void){
+void EmptyBattleTextbox(void) {
     LD_HL(mEmptyBattleTextbox_empty);
     JP(mBattleTextbox);
 
@@ -7678,18 +7701,18 @@ empty:
     return v_BattleRandom();
 }
 
-void v_BattleRandom(void){
-//  If the normal RNG is used in a link battle it'll desync.
-//  To circumvent this a shared PRNG is used instead.
+void v_BattleRandom(void) {
+    //  If the normal RNG is used in a link battle it'll desync.
+    //  To circumvent this a shared PRNG is used instead.
 
-//  But if we're in a non-link battle we're safe to use it
+    //  But if we're in a non-link battle we're safe to use it
     LD_A_addr(wLinkMode);
     AND_A_A;
-    JP_Z (mRandom);
+    JP_Z(mRandom);
 
-//  The PRNG operates in streams of 10 values.
+    //  The PRNG operates in streams of 10 values.
 
-//  Which value are we trying to pull?
+    //  Which value are we trying to pull?
     PUSH_HL;
     PUSH_BC;
     LD_A_addr(wLinkBattleRNCount);
@@ -7700,47 +7723,47 @@ void v_BattleRandom(void){
     INC_A;
     LD_addr_A(wLinkBattleRNCount);
 
-//  If we haven't hit the end yet, we're good
+    //  If we haven't hit the end yet, we're good
     CP_A(10 - 1);  // Exclude last value. See the closing comment
     LD_A_hl;
     POP_BC;
     POP_HL;
-    RET_C ;
+    RET_C;
 
-//  If we have, we have to generate new pseudorandom data
-//  Instead of having multiple PRNGs, ten seeds are used
+    //  If we have, we have to generate new pseudorandom data
+    //  Instead of having multiple PRNGs, ten seeds are used
     PUSH_HL;
     PUSH_BC;
     PUSH_AF;
 
-//  Reset count to 0
+    //  Reset count to 0
     XOR_A_A;
     LD_addr_A(wLinkBattleRNCount);
     LD_HL(wLinkBattleRNs);
     LD_B(10);  // number of seeds
 
-//  Generate next number in the sequence for each seed
-//  a[n+1] = (a[n] * 5 + 1) % 256
+    //  Generate next number in the sequence for each seed
+    //  a[n+1] = (a[n] * 5 + 1) % 256
 
 loop:
-// get last #
+    // get last #
     LD_A_hl;
 
-// a * 5 + 1
+    // a * 5 + 1
     LD_C_A;
     ADD_A_A;
     ADD_A_A;
     ADD_A_C;
     INC_A;
 
-// update #
+    // update #
     LD_hli_A;
     DEC_B;
     IF_NZ goto loop;
 
-//  This has the side effect of pulling the last value first,
-//  then wrapping around. As a result, when we check to see if
-//  we've reached the end, we check the one before it.
+    //  This has the side effect of pulling the last value first,
+    //  then wrapping around. As a result, when we check to see if
+    //  we've reached the end, we check the one before it.
 
     POP_AF;
     POP_BC;
@@ -7749,16 +7772,16 @@ loop:
 
 }
 
-void Call_PlayBattleAnim_OnlyIfVisible(void){
+void Call_PlayBattleAnim_OnlyIfVisible(void) {
     LD_A(BATTLE_VARS_SUBSTATUS3);
     CALL(aGetBattleVar);
     AND_A(1 << SUBSTATUS_FLYING | 1 << SUBSTATUS_UNDERGROUND);
-    RET_NZ ;
+    RET_NZ;
 
     return Call_PlayBattleAnim();
 }
 
-void Call_PlayBattleAnim(void){
+void Call_PlayBattleAnim(void) {
     LD_A_E;
     LD_addr_A(wFXAnimID);
     LD_A_D;
@@ -7769,7 +7792,7 @@ void Call_PlayBattleAnim(void){
     return FinishBattleAnim();
 }
 
-void FinishBattleAnim(void){
+void FinishBattleAnim(void) {
     PUSH_AF;
     PUSH_BC;
     PUSH_DE;
@@ -7786,16 +7809,16 @@ void FinishBattleAnim(void){
 
 }
 
-void GiveExperiencePoints(void){
-//  Give experience.
-//  Don't give experience if linked or in the Battle Tower.
+void GiveExperiencePoints(void) {
+    //  Give experience.
+    //  Don't give experience if linked or in the Battle Tower.
     LD_A_addr(wLinkMode);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
 
     LD_A_addr(wInBattleTowerBattle);
     BIT_A(0);
-    RET_NZ ;
+    RET_NZ;
 
     CALL(aGiveExperiencePoints_EvenlyDivideExpAmongParticipants);
     XOR_A_A;
@@ -7808,7 +7831,7 @@ loop:
     ADD_HL_BC;
     LD_A_hli;
     OR_A_hl;
-    JP_Z (mGiveExperiencePoints_next_mon);  // fainted
+    JP_Z(mGiveExperiencePoints_next_mon);  // fainted
 
     PUSH_BC;
     LD_HL(wBattleParticipantsNotFainted);
@@ -7820,9 +7843,9 @@ loop:
     LD_A_C;
     AND_A_A;
     POP_BC;
-    JP_Z (mGiveExperiencePoints_next_mon);
+    JP_Z(mGiveExperiencePoints_next_mon);
 
-//  give stat exp
+    //  give stat exp
     LD_HL(MON_STAT_EXP + 1);
     ADD_HL_BC;
     LD_D_H;
@@ -7892,7 +7915,7 @@ stat_exp_awarded:
     LDH_addr_A(hDivisor);
     LD_B(4);
     CALL(aDivide);
-//  Boost Experience for traded Pokemon
+    //  Boost Experience for traded Pokemon
     POP_BC;
     LD_HL(MON_ID);
     ADD_HL_BC;
@@ -7912,18 +7935,18 @@ boosted:
 
 
 no_boost:
-//  Boost experience for a Trainer Battle
+    //  Boost experience for a Trainer Battle
     LD_addr_A(wStringBuffer2 + 2);
     LD_A_addr(wBattleMode);
     DEC_A;
-    CALL_NZ (aBoostExp);
-//  Boost experience for Lucky Egg
+    CALL_NZ(aBoostExp);
+    //  Boost experience for Lucky Egg
     PUSH_BC;
     LD_A(MON_ITEM);
     CALL(aGetPartyParamLocation);
     LD_A_hl;
     CP_A(LUCKY_EGG);
-    CALL_Z (aBoostExp);
+    CALL_Z(aBoostExp);
     LDH_A_addr(hQuotient + 3);
     LD_addr_A(wStringBuffer2 + 1);
     LDH_A_addr(hQuotient + 2);
@@ -8000,7 +8023,7 @@ no_exp_overflow:
 
 
 not_max_exp:
-//  Check if the mon leveled up
+    //  Check if the mon leveled up
     XOR_A_A;  // PARTYMON
     LD_addr_A(wMonType);
     PREDEF(pCopyMonToTempMon);
@@ -8010,10 +8033,10 @@ not_max_exp:
     ADD_HL_BC;
     LD_A_hl;
     CP_A(MAX_LEVEL);
-    JP_NC (mGiveExperiencePoints_next_mon);
+    JP_NC(mGiveExperiencePoints_next_mon);
     CP_A_D;
-    JP_Z (mGiveExperiencePoints_next_mon);
-//  <NICKNAME> grew to level ##!
+    JP_Z(mGiveExperiencePoints_next_mon);
+    //  <NICKNAME> grew to level ##!
     LD_addr_A(wTempLevel);
     LD_A_addr(wCurPartyLevel);
     PUSH_AF;
@@ -8183,7 +8206,7 @@ done:
 
 
 EvenlyDivideExpAmongParticipants:
-//  count number of battle participants
+    //  count number of battle participants
     LD_A_addr(wBattleParticipantsNotFainted);
     LD_B_A;
     LD_C(PARTY_LENGTH);
@@ -8197,7 +8220,7 @@ count_loop:
     DEC_C;
     IF_NZ goto count_loop;
     CP_A(2);
-    RET_C ;
+    RET_C;
 
     LD_addr_A(wTempByteValue);
     LD_HL(wEnemyMonBaseStats);
@@ -8220,18 +8243,18 @@ base_stat_division_loop:
 
 }
 
-void BoostExp(void){
-//  Multiply experience by 1.5x
+void BoostExp(void) {
+    //  Multiply experience by 1.5x
     PUSH_BC;
-//  load experience value
+    //  load experience value
     LDH_A_addr(hProduct + 2);
     LD_B_A;
     LDH_A_addr(hProduct + 3);
     LD_C_A;
-//  halve it
+    //  halve it
     SRL_B;
     RR_C;
-//  add it back to the whole exp value
+    //  add it back to the whole exp value
     ADD_A_C;
     LDH_addr_A(hProduct + 3);
     LDH_A_addr(hProduct + 2);
@@ -8242,44 +8265,44 @@ void BoostExp(void){
 
 }
 
-void Text_MonGainedExpPoint(void){
+void Text_MonGainedExpPoint(void) {
     //text_far ['Text_Gained']
     //text_asm ['?']
     LD_HL(mExpPointsText);
     LD_A_addr(wStringBuffer2 + 2);  // IsTradedMon
     AND_A_A;
-    RET_Z ;
+    RET_Z;
 
     LD_HL(mBoostedExpPointsText);
     RET;
 
 }
 
-void BoostedExpPointsText(void){
+void BoostedExpPointsText(void) {
     //text_far ['_BoostedExpPointsText']
     //text_end ['?']
 
     return ExpPointsText();
 }
 
-void ExpPointsText(void){
+void ExpPointsText(void) {
     //text_far ['_ExpPointsText']
     //text_end ['?']
 
     return AnimateExpBar();
 }
 
-void AnimateExpBar(void){
+void AnimateExpBar(void) {
     PUSH_BC;
 
     LD_HL(wCurPartyMon);
     LD_A_addr(wCurBattleMon);
     CP_A_hl;
-    JP_NZ (mAnimateExpBar_finish);
+    JP_NZ(mAnimateExpBar_finish);
 
     LD_A_addr(wBattleMonLevel);
     CP_A(MAX_LEVEL);
-    JP_NC (mAnimateExpBar_finish);
+    JP_NC(mAnimateExpBar_finish);
 
     LDH_A_addr(hProduct + 3);
     LD_addr_A(wExperienceGained + 2);
@@ -8467,13 +8490,13 @@ end_animation:
 
 }
 
-void SendOutMonText(void){
+void SendOutMonText(void) {
     LD_A_addr(wLinkMode);
     AND_A_A;
     IF_Z goto not_linked;
 
-//  If we're in a LinkBattle print just "Go <PlayerMon>"
-//  unless DoBattle already set [wBattleHasJustStarted]
+    //  If we're in a LinkBattle print just "Go <PlayerMon>"
+    //  unless DoBattle already set [wBattleHasJustStarted]
     LD_HL(mGoMonText);
     LD_A_addr(wBattleHasJustStarted);
     AND_A_A;
@@ -8481,14 +8504,14 @@ void SendOutMonText(void){
 
 
 not_linked:
-//  Depending on the HP of the enemy mon, the game prints a different text
+    //  Depending on the HP of the enemy mon, the game prints a different text
     LD_HL(wEnemyMonHP);
     LD_A_hli;
     OR_A_hl;
     LD_HL(mGoMonText);
     IF_Z goto skip_to_textbox;
 
-// compute enemy health remaining as a percentage
+    // compute enemy health remaining as a percentage
     XOR_A_A;
     LDH_addr_A(hMultiplicand + 0);
     LD_HL(wEnemyMonHP);
@@ -8533,47 +8556,47 @@ skip_to_textbox:
 
 }
 
-void GoMonText(void){
+void GoMonText(void) {
     //text_far ['_GoMonText']
     //text_asm ['?']
     JR(mPrepareBattleMonNicknameText);
 
 }
 
-void DoItMonText(void){
+void DoItMonText(void) {
     //text_far ['_DoItMonText']
     //text_asm ['?']
     JR(mPrepareBattleMonNicknameText);
 
 }
 
-void GoForItMonText(void){
+void GoForItMonText(void) {
     //text_far ['_GoForItMonText']
     //text_asm ['?']
     JR(mPrepareBattleMonNicknameText);
 
 }
 
-void YourFoesWeakGetmMonText(void){
+void YourFoesWeakGetmMonText(void) {
     //text_far ['_YourFoesWeakGetmMonText']
     //text_asm ['?']
     return PrepareBattleMonNicknameText();
 }
 
-void PrepareBattleMonNicknameText(void){
+void PrepareBattleMonNicknameText(void) {
     LD_HL(mBattleMonNicknameText);
     RET;
 
 }
 
-void BattleMonNicknameText(void){
+void BattleMonNicknameText(void) {
     //text_far ['_BattleMonNicknameText']
     //text_end ['?']
 
     return WithdrawMonText();
 }
 
-void WithdrawMonText(void){
+void WithdrawMonText(void) {
     LD_HL(mWithdrawMonText_WithdrawMonText);
     JP(mBattleTextbox);
 
@@ -8584,7 +8607,7 @@ WithdrawMonText:
 //  Depending on the HP lost since the enemy mon was sent out, the game prints a different text
     PUSH_DE;
     PUSH_BC;
-// compute enemy health lost as a percentage
+    // compute enemy health lost as a percentage
     LD_HL(wEnemyMonHP + 1);
     LD_DE(wEnemyHPAtTimeOfPlayerSwitch + 1);
     LD_B_hl;
@@ -8616,58 +8639,58 @@ WithdrawMonText:
     LDH_A_addr(hQuotient + 3);
     LD_HL(mThatsEnoughComeBackText);
     AND_A_A;
-    RET_Z ;
+    RET_Z;
 
     LD_HL(mComeBackText);
     CP_A(30);
-    RET_C ;
+    RET_C;
 
     LD_HL(mOKComeBackText);
     CP_A(70);
-    RET_C ;
+    RET_C;
 
     LD_HL(mGoodComeBackText);
     RET;
 
 }
 
-void ThatsEnoughComeBackText(void){
+void ThatsEnoughComeBackText(void) {
     //text_far ['_ThatsEnoughComeBackText']
     //text_end ['?']
 
     return OKComeBackText();
 }
 
-void OKComeBackText(void){
+void OKComeBackText(void) {
     //text_far ['_OKComeBackText']
     //text_end ['?']
 
     return GoodComeBackText();
 }
 
-void GoodComeBackText(void){
+void GoodComeBackText(void) {
     //text_far ['_GoodComeBackText']
     //text_end ['?']
 
     return TextJump_ComeBack();
 }
 
-void TextJump_ComeBack(void){
-//  //  unreferenced
+void TextJump_ComeBack(void) {
+    //  //  unreferenced
     LD_HL(mComeBackText);
     RET;
 
 }
 
-void ComeBackText(void){
+void ComeBackText(void) {
     //text_far ['_ComeBackText']
     //text_end ['?']
 
     return HandleSafariAngerEatingStatus();
 }
 
-void HandleSafariAngerEatingStatus(void){
-//  //  unreferenced
+void HandleSafariAngerEatingStatus(void) {
+    //  //  unreferenced
     LD_HL(wSafariMonEating);
     LD_A_hl;
     AND_A_A;
@@ -8682,7 +8705,7 @@ angry:
     //assert ['wSafariMonEating - 1 == wSafariMonAngerCount'];
     LD_A_hl;
     AND_A_A;
-    RET_Z ;
+    RET_Z;
     DEC_hl;
     LD_HL(mBattleText_WildMonIsAngry);
     IF_NZ goto finish;
@@ -8703,7 +8726,7 @@ finish:
 
 }
 
-void FillInExpBar(void){
+void FillInExpBar(void) {
     PUSH_HL;
     CALL(aCalcExpBar);
     POP_HL;
@@ -8713,15 +8736,15 @@ void FillInExpBar(void){
 
 }
 
-void CalcExpBar(void){
-//  Calculate the percent exp between this level and the next
-//  Level in b
+void CalcExpBar(void) {
+    //  Calculate the percent exp between this level and the next
+    //  Level in b
     PUSH_DE;
     LD_D_B;
     PUSH_DE;
     CALLFAR(aCalcExpAtLevel);
     POP_DE;
-//  exp at current level gets pushed to the stack
+    //  exp at current level gets pushed to the stack
     LD_HL(hMultiplicand);
     LD_A_hli;
     PUSH_AF;
@@ -8729,10 +8752,10 @@ void CalcExpBar(void){
     PUSH_AF;
     LD_A_hl;
     PUSH_AF;
-//  next level
+    //  next level
     INC_D;
     CALLFAR(aCalcExpAtLevel);
-//  back up the next level exp, and subtract the two levels
+    //  back up the next level exp, and subtract the two levels
     LD_HL(hMultiplicand + 2);
     LD_A_hl;
     LDH_addr_A(hMathBuffer + 2);
@@ -8757,7 +8780,7 @@ void CalcExpBar(void){
     LD_A_hl;
     PUSH_AF;
 
-//  get the amount of exp remaining to the next level
+    //  get the amount of exp remaining to the next level
     LD_A_de;
     DEC_DE;
     LD_C_A;
@@ -8816,7 +8839,7 @@ done:
 
 }
 
-void PlaceExpBar(void){
+void PlaceExpBar(void) {
     LD_C(0x8);  // number of tiles
 
 loop1:
@@ -8854,20 +8877,20 @@ finish:
 
 }
 
-void GetBattleMonBackpic(void){
+void GetBattleMonBackpic(void) {
     LD_A_addr(wPlayerSubStatus4);
     BIT_A(SUBSTATUS_SUBSTITUTE);
     LD_HL(mBattleAnimCmd_RaiseSub);
-    JR_NZ (mGetBattleMonBackpic_DoAnim);  // substitute
+    JR_NZ(mGetBattleMonBackpic_DoAnim);  // substitute
 
     return DropPlayerSub();
 }
 
-void DropPlayerSub(void){
+void DropPlayerSub(void) {
     LD_A_addr(wPlayerMinimized);
     AND_A_A;
     LD_HL(mBattleAnimCmd_MinimizeOpp);
-    JR_NZ (mGetBattleMonBackpic_DoAnim);
+    JR_NZ(mGetBattleMonBackpic_DoAnim);
     LD_A_addr(wCurPartySpecies);
     PUSH_AF;
     LD_A_addr(wBattleMonSpecies);
@@ -8882,7 +8905,7 @@ void DropPlayerSub(void){
 
 }
 
-void GetBattleMonBackpic_DoAnim(void){
+void GetBattleMonBackpic_DoAnim(void) {
     LDH_A_addr(hBattleTurn);
     PUSH_AF;
     XOR_A_A;
@@ -8895,20 +8918,20 @@ void GetBattleMonBackpic_DoAnim(void){
 
 }
 
-void GetEnemyMonFrontpic(void){
+void GetEnemyMonFrontpic(void) {
     LD_A_addr(wEnemySubStatus4);
     BIT_A(SUBSTATUS_SUBSTITUTE);
     LD_HL(mBattleAnimCmd_RaiseSub);
-    JR_NZ (mGetEnemyMonFrontpic_DoAnim);
+    JR_NZ(mGetEnemyMonFrontpic_DoAnim);
 
     return DropEnemySub();
 }
 
-void DropEnemySub(void){
+void DropEnemySub(void) {
     LD_A_addr(wEnemyMinimized);
     AND_A_A;
     LD_HL(mBattleAnimCmd_MinimizeOpp);
-    JR_NZ (mGetEnemyMonFrontpic_DoAnim);
+    JR_NZ(mGetEnemyMonFrontpic_DoAnim);
 
     LD_A_addr(wCurPartySpecies);
     PUSH_AF;
@@ -8926,7 +8949,7 @@ void DropEnemySub(void){
 
 }
 
-void GetEnemyMonFrontpic_DoAnim(void){
+void GetEnemyMonFrontpic_DoAnim(void) {
     LDH_A_addr(hBattleTurn);
     PUSH_AF;
     CALL(aSetEnemyTurn);
@@ -8938,13 +8961,13 @@ void GetEnemyMonFrontpic_DoAnim(void){
 
 }
 
-void StartBattle(void){
-//  This check prevents you from entering a battle without any Pokemon.
-//  Those using walk-through-walls to bypass getting a Pokemon experience
-//  the effects of this check.
+void StartBattle(void) {
+    //  This check prevents you from entering a battle without any Pokemon.
+    //  Those using walk-through-walls to bypass getting a Pokemon experience
+    //  the effects of this check.
     LD_A_addr(wPartyCount);
     AND_A_A;
-    RET_Z ;
+    RET_Z;
 
     LD_A_addr(wTimeOfDayPal);
     PUSH_AF;
@@ -8958,14 +8981,14 @@ void StartBattle(void){
 
 }
 
-void CallDoBattle(void){
-//  //  unreferenced
+void CallDoBattle(void) {
+    //  //  unreferenced
     CALL(aDoBattle);
     RET;
 
 }
 
-void BattleIntro(void){
+void BattleIntro(void) {
     FARCALL(aStubbedTrainerRankings_Battles);  // mobile
     CALL(aLoadTrainerOrWildMonPic);
     XOR_A_A;
@@ -9000,14 +9023,14 @@ void BattleIntro(void){
     CALL(aClearSprites);
     LD_A_addr(wBattleMode);
     CP_A(WILD_BATTLE);
-    CALL_Z (aUpdateEnemyHUD);
+    CALL_Z(aUpdateEnemyHUD);
     LD_A(0x1);
     LDH_addr_A(hBGMapMode);
     RET;
 
 }
 
-void LoadTrainerOrWildMonPic(void){
+void LoadTrainerOrWildMonPic(void) {
     LD_A_addr(wOtherTrainerClass);
     AND_A_A;
     IF_NZ goto Trainer;
@@ -9021,15 +9044,15 @@ Trainer:
 
 }
 
-void InitEnemy(void){
+void InitEnemy(void) {
     LD_A_addr(wOtherTrainerClass);
     AND_A_A;
-    JP_NZ (mInitEnemyTrainer);  // trainer
+    JP_NZ(mInitEnemyTrainer);  // trainer
     JP(mInitEnemyWildmon);  // wild
 
 }
 
-void BackUpBGMap2(void){
+void BackUpBGMap2(void) {
     LDH_A_addr(rSVBK);
     PUSH_AF;
     LD_A(BANK(wDecompressScratch));
@@ -9054,7 +9077,7 @@ void BackUpBGMap2(void){
 
 }
 
-void InitEnemyTrainer(void){
+void InitEnemyTrainer(void) {
     LD_addr_A(wTrainerClass);
     FARCALL(aStubbedTrainerRankings_TrainerBattles);
     XOR_A_A;
@@ -9062,7 +9085,7 @@ void InitEnemyTrainer(void){
     CALLFAR(aGetTrainerAttributes);
     CALLFAR(aReadTrainerParty);
 
-// RIVAL1's first mon has no held item
+    // RIVAL1's first mon has no held item
     LD_A_addr(wTrainerClass);
     CP_A(RIVAL1);
     IF_NZ goto ok;
@@ -9115,7 +9138,7 @@ done:
 
 }
 
-void InitEnemyWildmon(void){
+void InitEnemyWildmon(void) {
     LD_A(WILD_BATTLE);
     LD_addr_A(wBattleMode);
     FARCALL(aStubbedTrainerRankings_WildBattles);
@@ -9152,8 +9175,8 @@ skip_unown:
 
 }
 
-void FillEnemyMovesFromMoveIndicesBuffer(void){
-//  //  unreferenced
+void FillEnemyMovesFromMoveIndicesBuffer(void) {
+    //  //  unreferenced
     LD_HL(wEnemyMonMoves);
     LD_DE(wListMoves_MoveIndicesBuffer);
     LD_B(NUM_MOVES);
@@ -9209,7 +9232,7 @@ clearpp:
 
 }
 
-void ExitBattle(void){
+void ExitBattle(void) {
     CALL(aExitBattle_HandleEndOfBattle);
     CALL(aCleanUpBattleRAM);
     RET;
@@ -9229,7 +9252,7 @@ HandleEndOfBattle:
 not_linked:
     LD_A_addr(wBattleResult);
     AND_A(0xf);
-    RET_NZ ;
+    RET_NZ;
     CALL(aCheckPayDay);
     XOR_A_A;
     LD_addr_A(wForceEvolution);
@@ -9239,7 +9262,7 @@ not_linked:
 
 }
 
-void CleanUpBattleRAM(void){
+void CleanUpBattleRAM(void) {
     CALL(aBattleEnd_HandleRoamMons);
     XOR_A_A;
     LD_addr_A(wLowHealthAlarm);
@@ -9274,13 +9297,13 @@ loop:
 
 }
 
-void CheckPayDay(void){
+void CheckPayDay(void) {
     LD_HL(wPayDayMoney);
     LD_A_hli;
     OR_A_hl;
     INC_HL;
     OR_A_hl;
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wAmuletCoin);
     AND_A_A;
     IF_Z goto okay;
@@ -9305,14 +9328,14 @@ okay:
     CALL(aStdBattleTextbox);
     LD_A_addr(wInBattleTowerBattle);
     BIT_A(0);
-    RET_Z ;
+    RET_Z;
     CALL(aClearTilemap);
     CALL(aClearBGPalettes);
     RET;
 
 }
 
-void ShowLinkBattleParticipantsAfterEnd(void){
+void ShowLinkBattleParticipantsAfterEnd(void) {
     FARCALL(aStubbedTrainerRankings_LinkBattles);
     FARCALL(aBackupMobileEventIndex);
     LD_A_addr(wCurOTMon);
@@ -9326,9 +9349,9 @@ void ShowLinkBattleParticipantsAfterEnd(void){
 
 }
 
-void DisplayLinkBattleResult(void){
+void DisplayLinkBattleResult(void) {
     FARCALL(aCheckMobileBattleError);
-    JP_C (mDisplayLinkBattleResult_Mobile_InvalidBattle);
+    JP_C(mDisplayLinkBattleResult_Mobile_InvalidBattle);
     CALL(aIsMobileBattle2);
     IF_NZ goto proceed;
 
@@ -9345,7 +9368,7 @@ proceed:
     CP_A(LOSE);
     IF_C goto win;  // WIN
     IF_Z goto lose;  // LOSE
-// DRAW
+    // DRAW
     FARCALL(aStubbedTrainerRankings_ColosseumDraws);
     LD_DE(mDisplayLinkBattleResult_Draw);
     goto store_result;
@@ -9418,14 +9441,14 @@ InvalidBattle:
     return IsMobileBattle2();
 }
 
-void IsMobileBattle2(void){
+void IsMobileBattle2(void) {
     LD_A_addr(wLinkMode);
     CP_A(LINK_MOBILE);
     RET;
 
 }
 
-void v_DisplayLinkRecord(void){
+void v_DisplayLinkRecord(void) {
     LD_A(BANK(sLinkBattleStats));
     CALL(aOpenSRAM);
 
@@ -9447,7 +9470,7 @@ void v_DisplayLinkRecord(void){
 
 }
 
-void ReadAndPrintLinkBattleRecord(void){
+void ReadAndPrintLinkBattleRecord(void) {
     CALL(aClearTilemap);
     CALL(aClearSprites);
     CALL(aReadAndPrintLinkBattleRecord_PrintBattleRecord);
@@ -9565,7 +9588,7 @@ quit:
 PrintZerosIfNoSaveFileExists:
     LD_A_addr(wSavedAtLeastOnce);
     AND_A_A;
-    RET_NZ ;
+    RET_NZ;
     LD_DE(mReadAndPrintLinkBattleRecord_Scores);
     CALL(aPlaceString);
     SCF;
@@ -9592,7 +9615,7 @@ Total:
     return BattleEnd_HandleRoamMons();
 }
 
-void BattleEnd_HandleRoamMons(void){
+void BattleEnd_HandleRoamMons(void) {
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_ROAMING);
     IF_NZ goto not_roaming;
@@ -9620,7 +9643,7 @@ caught_or_defeated_roam_mon:
 not_roaming:
     CALL(aBattleRandom);
     AND_A(0xf);
-    RET_NZ ;
+    RET_NZ;
 
 
 update_roam_mons:
@@ -9629,86 +9652,86 @@ update_roam_mons:
 
 }
 
-void GetRoamMonMapGroup(void){
+void GetRoamMonMapGroup(void) {
     LD_A_addr(wTempEnemyMonSpecies);
     LD_B_A;
     LD_A_addr(wRoamMon1Species);
     CP_A_B;
     LD_HL(wRoamMon1MapGroup);
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wRoamMon2Species);
     CP_A_B;
     LD_HL(wRoamMon2MapGroup);
-    RET_Z ;
+    RET_Z;
     LD_HL(wRoamMon3MapGroup);
     RET;
 
 }
 
-void GetRoamMonMapNumber(void){
+void GetRoamMonMapNumber(void) {
     LD_A_addr(wTempEnemyMonSpecies);
     LD_B_A;
     LD_A_addr(wRoamMon1Species);
     CP_A_B;
     LD_HL(wRoamMon1MapNumber);
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wRoamMon2Species);
     CP_A_B;
     LD_HL(wRoamMon2MapNumber);
-    RET_Z ;
+    RET_Z;
     LD_HL(wRoamMon3MapNumber);
     RET;
 
 }
 
-void GetRoamMonHP(void){
-//  output: hl = wRoamMonHP
+void GetRoamMonHP(void) {
+    //  output: hl = wRoamMonHP
     LD_A_addr(wTempEnemyMonSpecies);
     LD_B_A;
     LD_A_addr(wRoamMon1Species);
     CP_A_B;
     LD_HL(wRoamMon1HP);
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wRoamMon2Species);
     CP_A_B;
     LD_HL(wRoamMon2HP);
-    RET_Z ;
+    RET_Z;
     LD_HL(wRoamMon3HP);
     RET;
 
 }
 
-void GetRoamMonDVs(void){
-//  output: hl = wRoamMonDVs
+void GetRoamMonDVs(void) {
+    //  output: hl = wRoamMonDVs
     LD_A_addr(wTempEnemyMonSpecies);
     LD_B_A;
     LD_A_addr(wRoamMon1Species);
     CP_A_B;
     LD_HL(wRoamMon1DVs);
-    RET_Z ;
+    RET_Z;
     LD_A_addr(wRoamMon2Species);
     CP_A_B;
     LD_HL(wRoamMon2DVs);
-    RET_Z ;
+    RET_Z;
     LD_HL(wRoamMon3DVs);
     RET;
 
 }
 
-void GetRoamMonSpecies(void){
+void GetRoamMonSpecies(void) {
     LD_A_addr(wTempEnemyMonSpecies);
     LD_HL(wRoamMon1Species);
     CP_A_hl;
-    RET_Z ;
+    RET_Z;
     LD_HL(wRoamMon2Species);
     CP_A_hl;
-    RET_Z ;
+    RET_Z;
     LD_HL(wRoamMon3Species);
     RET;
 
 }
 
-void AddLastLinkBattleToLinkRecord(void){
+void AddLastLinkBattleToLinkRecord(void) {
     LD_HL(wOTPlayerID);
     LD_DE(wStringBuffer1);
     LD_BC(2);
@@ -9777,15 +9800,15 @@ StoreResult:
     IF_C goto okay;  // WIN
     LD_BC((sLinkBattleRecord1Losses - sLinkBattleRecord1) + 1);
     IF_Z goto okay;  // LOSE
-// DRAW
+    // DRAW
     LD_BC((sLinkBattleRecord1Draws - sLinkBattleRecord1) + 1);
 
 okay:
     ADD_HL_BC;
     CALL(aAddLastLinkBattleToLinkRecord_CheckOverflow);
-    RET_NC ;
+    RET_NC;
     INC_hl;
-    RET_NZ ;
+    RET_NZ;
     DEC_HL;
     INC_hl;
     RET;
@@ -9796,7 +9819,7 @@ CheckOverflow:
     LD_A_hl;
     INC_HL;
     CP_A(HIGH(MAX_LINK_RECORD));
-    RET_C ;
+    RET_C;
     LD_A_hl;
     CP_A(LOW(MAX_LINK_RECORD));
     RET;
@@ -9923,13 +9946,13 @@ okay2:
     LD_A_hl;
     ADC_A_B;
     LD_B_A;
-    RET_NC ;
+    RET_NC;
     INC_E;
     RET;
 
 }
 
-void InitBattleDisplay(void){
+void InitBattleDisplay(void) {
     CALL(aInitBattleDisplay_InitBackPic);
     hlcoord(0, 12, wTilemap);
     LD_B(4);
@@ -10002,17 +10025,17 @@ InitBackPic:
 
 }
 
-void GetTrainerBackpic(void){
-//  Load the player character's backpic (6x6) into VRAM starting from vTiles2 tile $31.
+void GetTrainerBackpic(void) {
+    //  Load the player character's backpic (6x6) into VRAM starting from vTiles2 tile $31.
 
-//  Special exception for Dude.
+    //  Special exception for Dude.
     LD_B(BANK(aDudeBackpic));
     LD_HL(mDudeBackpic);
     LD_A_addr(wBattleType);
     CP_A(BATTLETYPE_TUTORIAL);
     IF_Z goto Decompress;
 
-//  What gender are we?
+    //  What gender are we?
     LD_A_addr(wPlayerSpriteSetupFlags);
     BIT_A(PLAYERSPRITESETUP_FEMALE_TO_MALE_F);
     IF_NZ goto Chris;
@@ -10020,13 +10043,13 @@ void GetTrainerBackpic(void){
     BIT_A(PLAYERGENDER_FEMALE_F);
     IF_Z goto Chris;
 
-//  It's a girl.
+    //  It's a girl.
     FARCALL(aGetKrisBackpic);
     RET;
 
 
 Chris:
-//  It's a boy.
+    //  It's a boy.
     LD_B(BANK(aChrisBackpic));
     LD_HL(mChrisBackpic);
 
@@ -10039,7 +10062,7 @@ Decompress:
 
 }
 
-void CopyBackpic(void){
+void CopyBackpic(void) {
     LDH_A_addr(rSVBK);
     PUSH_AF;
     LD_A(BANK(wDecompressScratch));
@@ -10100,7 +10123,7 @@ inner_loop:
 
 }
 
-void BattleStartMessage(void){
+void BattleStartMessage(void) {
     LD_A_addr(wBattleMode);
     DEC_A;
     IF_Z goto wild;
@@ -10181,7 +10204,7 @@ PlaceBattleStartText:
     CALL(aStdBattleTextbox);
 
     CALL(aIsMobileBattle2);
-    RET_NZ ;
+    RET_NZ;
 
     LD_C(0x2);  // start
     FARCALL(aMobile_PrintOpponentBattleMessage);

@@ -15251,6 +15251,7 @@ RAMMAP(hSeconds, 0x00, 0xff98)
 RAMMAP(hVBlankCounter, 0x00, 0xff9b)
 RAMMAP(hROMBank, 0x00, 0xff9d)
 RAMMAP(hVBlank, 0x00, 0xff9e)
+//uint8_t hVBlank;
 RAMMAP(hMapEntryMethod, 0x00, 0xff9f)
 RAMMAP(hMenuReturn, 0x00, 0xffa0)
 RAMMAP(hUnusedByte, 0x00, 0xffa1)

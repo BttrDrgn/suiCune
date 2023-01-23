@@ -11,3 +11,4 @@ void GSReloadPalettes(void);
 void ReloadSpritesNoPalettes(void);
 void SwapTextboxPalettes(void);
 void ScrollBGMapPalettes(void);
+
