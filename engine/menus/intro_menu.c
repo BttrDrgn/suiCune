@@ -2,11 +2,11 @@
 #include "intro_menu.h"
 #include <audio/engine.h>
 
+#include "home/delay.h"
+
 void Intro_MainMenu(void) {
     v_PlayMusic(MUSIC_NONE);
-    CALL(aDelayFrame);
-    LD_DE(MUSIC_MAIN_MENU);
-    LD_A_E;
+    DelayFrame;
     v_PlayMusic(MUSIC_MAIN_MENU);
     aMainMenu;
     mStartTitleScreen;

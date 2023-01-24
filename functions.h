@@ -108,8 +108,8 @@ void init_function_pointers() {
     // REDIRECTED(FarDecompress);
 
     // home/delay.c
-    // REDIRECTED(DelayFrame);
-    // REDIRECTED(DelayFrames);
+    //REDIRECTED(DelayFrame);
+    //REDIRECTED(DelayFrames);
 
     // home/double_speed.c
     // REDIRECTED(DoubleSpeed);

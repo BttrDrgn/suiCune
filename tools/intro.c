@@ -1429,25 +1429,25 @@ okay:
     RET;
 
 
-BWFade:
+//BWFade:
 //  Fade between black and white.
-for hue, 32
+//for hue, 32
     //rgb ['hue', 'hue', 'hue']
-    }
+    //}
 
 
-BlackLBlueFade:
+//BlackLBlueFade:
 //  Fade between black and light blue.
-for hue, 32
+//for hue, 32
     //rgb ['0', 'hue / 2', 'hue']
-    }
+    //}
 
 
-BlackBlueFade:
+//BlackBlueFade:
 //  Fade between black and blue.
-for hue, 32
+//for hue, 32
     //rgb ['0', '0', 'hue']
-    }
+    //}
 
     return Intro_Scene20_AppearUnown();
 }
@@ -1571,22 +1571,22 @@ void Intro_FadeUnownWordPals(void){
     RET;
 
 
-FastFadePalettes:
-hue = 31
-    for(int rept = 0; rept < 8; rept++){
+//FastFadePalettes:
+//hue = 31
+    //for(int rept = 0; rept < 8; rept++){
     //rgb ['hue', 'hue', 'hue']
-hue -= 1
+//hue -= 1
     //rgb ['hue', 'hue', 'hue']
-hue -= 2
-    }
+//hue -= 2
+    //}
 
 
-SlowFadePalettes:
-hue = 31
-    for(int rept = 0; rept < 16; rept++){
+//SlowFadePalettes:
+//hue = 31
+    //for(int rept = 0; rept < 16; rept++){
     //rgb ['hue', 'hue', 'hue']
-hue -= 1
-    }
+//hue -= 1
+    //}
 
     return Intro_LoadTilemap();
 }

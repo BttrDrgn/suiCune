@@ -1,27 +1,12 @@
-#include "../constants.h"
+#include <stdio.h>
+#include <Windows.h>
+
 #include "delay.h"
 
-void DelayFrame(void){
-    //  Wait for one frame
-    LD_A(1);
-    LD_addr_A(wVBlankOccurred);
-
-//  Wait for the next VBlank, halting to conserve battery
-
-halt:
-        //halt ['']  // rgbasm adds a nop after this instruction by default
-    LD_A_addr(wVBlankOccurred);
-    AND_A_A;
-    IF_NZ goto halt;
-    RET;
-
+void DelayFrame() {
+    Sleep(16);
 }
 
-void DelayFrames(void){
-    //  Wait c frames
-    CALL(aDelayFrame);
-    DEC_C;
-    JR_NZ (mDelayFrames);
-    RET;
-
+void DelayFrames(int num_frames) {
+    Sleep(16 * num_frames);
 }
